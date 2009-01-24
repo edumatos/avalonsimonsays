@@ -29,3 +29,4 @@ I have recorded the steps taken to make this game on this page.
  # Added sounds
  # Added images
  # Created a mashup that looks and sounds like the game
+ # Add AvalonSimonSays.Promition
