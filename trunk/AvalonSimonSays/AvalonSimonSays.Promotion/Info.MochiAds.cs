@@ -12,7 +12,7 @@ namespace AvalonSimonSays.Promotion
 			// var _mochiads_game_id:String = "45a8ce26875af6d6";
 			public const string Key = "45a8ce26875af6d6";
 
-			//public const string URL = "http://games.mochiads.com/c/g/avalon-";
+			public const string URL = "http://games.mochiads.com/c/g/avalon-simon-says/avalon-simon-says.swf";
 
 		}
 	}

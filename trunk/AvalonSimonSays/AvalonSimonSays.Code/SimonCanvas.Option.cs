@@ -26,8 +26,12 @@ namespace AvalonSimonSays.Code
 
 			public event Action Click;
 
-			public Option(Brush Color, string Image, string Sound, int Left, int Top, int Width, int Height)
+			public readonly Key Key;
+
+			public Option(Brush Color, Key Key, string Image, string Sound, int Left, int Top, int Width, int Height)
 			{
+				this.Key = Key;
+
 				this.Image = new Image
 				{
 					Stretch = Stretch.Fill,
@@ -47,8 +51,7 @@ namespace AvalonSimonSays.Code
 				Overlay.MouseLeftButtonDown +=
 					delegate
 					{
-						if (Click != null)
-							Click();
+						RaiseClick();
 					};
 
 				this.Play =
@@ -68,6 +71,12 @@ namespace AvalonSimonSays.Code
 							}
 						);
 					};
+			}
+
+			public void RaiseClick()
+			{
+				if (Click != null)
+					Click();
 			}
 		}
 
