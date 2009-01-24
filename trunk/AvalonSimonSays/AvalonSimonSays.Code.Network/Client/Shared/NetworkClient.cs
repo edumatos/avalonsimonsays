@@ -108,6 +108,8 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 
 			var Server_Hello_UserSynced = new BindingList<PlayerIdentity>();
 
+			bool TurnModeDisabled = false;
+
 			this.Events.Server_Hello +=
 				e =>
 				{
@@ -117,6 +119,11 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 
 					//Content.Console.WriteLine("Server_Hello " + e);
 
+					if (e.turn > 0)
+						TurnModeDisabled = true;
+
+					this.Content.Message("play without turns!");
+
 					// we have joined the server
 					// now we need to sync up the frames
 					// if we are alone in the server we do not sync yet
@@ -124,6 +131,7 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 					{
 						// we do not have to sync to others
 						this.Content.LocalIdentity.SyncFramePaused = false;
+						this.Content.ActiveIdentity = this.Content.LocalIdentity;
 
 						this.Content.StartGame();
 					}
@@ -143,7 +151,12 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 									// unpause
 									this.Content.LocalIdentity.SyncFramePaused = false;
 
+									if (TurnModeDisabled)
+										this.Content.ActiveIdentity = this.Content.LocalIdentity;
+
 									this.Content.StartGame();
+
+									this.Content.OptionsEnabled = true;
 								}
 							}
 						);
@@ -218,6 +231,11 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 
 								this.Content.User.Select(k => this.Content.Options.IndexOf(k)).ForEach(
 									option => this.Messages.UserEnqueueSimon(e.user, option)
+								);
+
+								this.Messages.SetActive(
+									this.Content.LocalIdentity.SyncFrame,
+									this.Content.ActiveIdentity.Number
 								);
 
 							}
@@ -340,32 +358,6 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 
 
 
-			//this.Events.UserKeyStateChanged +=
-			//    e =>
-			//    {
-			//        var c = this[e.user];
-
-			//        this.Content.LocalIdentity.HandleFrame(e.frame,
-			//            delegate
-			//            {
-			//                var p = c[e.local];
-
-			//                // if the remote frame is less than here
-			//                // then we are in the future
-			//                // otherwise they are in the future
-			//                var key = p.Input.Keyboard.FromDefaultTranslation((Key)e.key);
-			//                var state = Convert.ToBoolean(e.state);
-
-
-
-			//                p.Input.Keyboard.KeyState[key] = state;
-			//            },
-			//            delegate
-			//            {
-			//                this.Content.Console.WriteLine("UserKeyStateChanged desync " + e);
-			//            }
-			//        );
-			//    };
 
 			#region UserMouseMove
 			this.Content.Sync_RemoteOnly_MouseMove =
@@ -418,6 +410,50 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 					this.Content.User.Enqueue(this.Content.Options.AtModulus(e.option));
 				};
 
+			#region EndTurn
+			this.Content.Sync_RemoteOnly_SetActive =
+				delegate
+				{
+					if (TurnModeDisabled)
+						return;
+
+					var NextTurn = this.Content.AllPlayers.Next(k => k == this.Content.LocalIdentity);
+
+					if (NextTurn != this.Content.LocalIdentity)
+					{
+
+						var FutureFrame = this.Content.LocalIdentity.HandleFutureFrame(
+							delegate
+							{
+								this.Content.ActiveIdentity = NextTurn;
+							}
+						);
+
+						this.Messages.SetActive(FutureFrame, NextTurn.Number);
+					}
+				};
+
+			this.Events.UserSetActive +=
+				e =>
+				{
+					if (TurnModeDisabled)
+						return;
+
+					var c = this[e.user];
+
+					this.Content.LocalIdentity.HandleFrame(e.frame,
+						delegate
+						{
+							this.Content.ActiveIdentity = this.Content.AllPlayers.Single(k => k.Number == e.active);
+						},
+						delegate
+						{
+							//this.Content.Console.WriteLine("UserTeleportTo desync " + e);
+						}
+					);
+				};
+			#endregion
+
 			#region Sync_ClickOption
 			var Sync_ClickOption = this.Content.Sync_ClickOption;
 
@@ -429,7 +465,7 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 					this.Content.LocalIdentity.HandleFrame(e.frame,
 						delegate
 						{
-							Sync_ClickOption(e.option);
+							Sync_ClickOption(e.user, e.option);
 						},
 						delegate
 						{
@@ -439,13 +475,13 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 				};
 
 			this.Content.Sync_ClickOption =
-				(int option) =>
+				(int user, int option) =>
 				{
 					var FutureFrame = this.Content.LocalIdentity.HandleFutureFrame(
 						delegate
 						{
 							// do a local teleport in the future
-							Sync_ClickOption(option);
+							Sync_ClickOption(user, option);
 						}
 					);
 
@@ -488,6 +524,18 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 					this.Messages.SimonOption(FutureFrame, option);
 				};
 			#endregion
+
+			this.Content.MyHighestScoreChanged +=
+				delegate
+				{
+					this.Messages.Server_SetScore(this.Content.MyHighestScore);
+				};
+
+			this.Content.StatisticsAddFail +=
+				delegate
+				{
+					this.Messages.Server_AddFail();
+				};
 
 			//#region UserLoadLevelHint
 			//this.Content.Sync_RemoteOnly_LoadLevelHint =

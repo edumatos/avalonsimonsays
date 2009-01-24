@@ -27,10 +27,10 @@ namespace AvalonSimonSays.Code.Network.Server
 		false)]
 
 	[GameSetup.Boolean(
-		"turn",
-		"Disable turn mode",
-		"Players can play without waiting their turn",
-		false)]
+	    "turn",
+	    "Disable turn mode",
+	    "Players can play without waiting their turn",
+	    false)]
 
 	[Script]
 	public class NonobaGame : NonobaGame<NonobaGameUser<VirtualPlayer>>

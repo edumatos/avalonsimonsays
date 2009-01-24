@@ -29,6 +29,19 @@ namespace AvalonSimonSays.Code.Network.Shared
 
 			//var score = 0;
 
+			player.FromPlayer.Server_SetScore +=
+				e =>
+				{
+					player.SetScore("score", e.score);
+				};
+
+			player.FromPlayer.Server_AddFail +=
+				e =>
+				{
+					player.AddScore("fail", 1);
+				};
+
+
 			//player.FromPlayer.AddScore += e =>
 			//{
 			//    score += e.score;
@@ -125,8 +138,10 @@ namespace AvalonSimonSays.Code.Network.Shared
 			//if (this.Settings.GetBoolean(SettingsInfo.layoutinput, false))
 			//    layoutinput = 0;
 
-			//if (this.Settings.GetBoolean(SettingsInfo.vote, false))
-			//    vote = 0;
+			var turn = 0;
+
+			if (this.Settings.GetBoolean("turn", false))
+				turn = 1;
 
 			//if (this.Settings.GetBoolean(SettingsInfo.hints, true))
 			//    hints = 1;
@@ -135,7 +150,8 @@ namespace AvalonSimonSays.Code.Network.Shared
 			player.ToPlayer.Server_Hello(
 				player.UserId, 
 				player.Username, 
-				this.Users.Count - 1
+				this.Users.Count - 1,
+				turn
 				//navbar,
 				//vote,
 				//layoutinput,
