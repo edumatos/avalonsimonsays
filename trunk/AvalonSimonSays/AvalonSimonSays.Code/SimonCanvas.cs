@@ -10,6 +10,7 @@ using ScriptCoreLib.Shared.Avalon.Extensions;
 using ScriptCoreLib.Shared.Lambda;
 using System.Windows.Input;
 using System.Linq;
+using System.Windows.Shapes;
 
 namespace AvalonSimonSays.Code
 {
@@ -27,7 +28,7 @@ namespace AvalonSimonSays.Code
 
 		public readonly PlayerIdentity LocalIdentity = new PlayerIdentity { Name = "Local Player" };
 
-		bool InternalOptionsEnabled;
+		bool InternalOptionsEnabled = true;
 		public bool OptionsEnabled
 		{
 			get
@@ -41,7 +42,6 @@ namespace AvalonSimonSays.Code
 			}
 		}
 
-		public event Action<Option> Click;
 
 		public AnimatedOpacity<Image> HappySimon;
 
@@ -58,9 +58,15 @@ namespace AvalonSimonSays.Code
 			{
 				Width = DefaultWidth,
 				Height = DefaultHeight,
-				Background = Brushes.White,
-				Opacity = 0
 			}.AttachTo(this);
+
+			new Rectangle
+			{
+				Width = DefaultWidth,
+				Height = DefaultHeight,
+				Fill = Brushes.White,
+				Opacity = 0
+			}.AttachTo(this.Overlay);
 
 			this.Arrows.AttachTo(this.InfoLayer);
 
@@ -82,8 +88,8 @@ namespace AvalonSimonSays.Code
 					NewOption.Click +=
 						delegate
 						{
-							if (this.Click != null)
-								this.Click(NewOption);
+							if (this.Sync_ClickOption != null)
+								this.Sync_ClickOption(Options.IndexOf(NewOption));
 						};
 				}
 			);
@@ -175,97 +181,106 @@ namespace AvalonSimonSays.Code
 
 			this.StartThinking();
 
+
+			this.Sync_ClickOption =
+				option =>
+				{
+					this.Options.AtModulus(option).Play(null);
+				};
 		}
+
+
+		public readonly Queue<Option> Simon = new Queue<Option>();
+		public readonly Queue<Option> User = new Queue<Option>();
 
 		public void StartGame()
 		{
 			(Assets.Shared.KnownAssets.Path.Sounds + "/2.mp3").PlaySound();
 
 
-			var Simon = new Queue<Option>();
-			var User = new Queue<Option>();
+			
 
-			Action GoForward =
-				delegate
-				{
-					OptionsEnabled = false;
+			//Action GoForward =
+			//    delegate
+			//    {
+			//        OptionsEnabled = false;
 
-					Simon.Enqueue(Options.Random());
+			//        Simon.Enqueue(Options.Random());
 
-					1000.AtDelay(
-						delegate
-						{
-							HappySimon.Opacity = 0;
+			//        1000.AtDelay(
+			//            delegate
+			//            {
+			//                HappySimon.Opacity = 0;
 
-							Simon.ForEach(
-								(value, next) =>
-								{
-									value.Play(
-										delegate
-										{
-											200.AtDelay(next);
-										}
-									);
-								}
-							)(
-								delegate
-								{
-									OptionsEnabled = true;
-								}
-							);
-						}
-					);
-				};
+			//                Simon.ForEach(
+			//                    (value, next) =>
+			//                    {
+			//                        value.Play(
+			//                            delegate
+			//                            {
+			//                                200.AtDelay(next);
+			//                            }
+			//                        );
+			//                    }
+			//                )(
+			//                    delegate
+			//                    {
+			//                        OptionsEnabled = true;
+			//                    }
+			//                );
+			//            }
+			//        );
+			//    };
 
-			GoForward();
+			//GoForward();
 
-			this.Click +=
-				Option =>
-				{
+			//this.Click +=
+			//    Option =>
+			//    {
 
-					var n = Simon.Dequeue();
+			//        var n = Simon.Dequeue();
 
-					if (n == Option)
-					{
-						User.Enqueue(n);
-						n.Play(null);
+			//        if (n == Option)
+			//        {
+			//            User.Enqueue(n);
+			//            n.Play(null);
 
-						if (Simon.Count == 0)
-						{
-							OptionsEnabled = false;
+			//            if (Simon.Count == 0)
+			//            {
+			//                OptionsEnabled = false;
 
-							HappySimon.Opacity = 1;
+			//                HappySimon.Opacity = 1;
 
-							while (User.Count > 0)
-							{
-								Simon.Enqueue(User.Dequeue());
-							}
+			//                while (User.Count > 0)
+			//                {
+			//                    Simon.Enqueue(User.Dequeue());
+			//                }
 
-							GoForward();
-						}
-					}
-					else
-					{
-						OptionsEnabled = false;
+			//                GoForward();
+			//            }
+			//        }
+			//        else
+			//        {
+			//            OptionsEnabled = false;
 
-						n.Image.Show();
+			//            n.Image.Show();
 
-						(Assets.Shared.KnownAssets.Path.Sounds + "/6.mp3").PlaySound();
+			//            (Assets.Shared.KnownAssets.Path.Sounds + "/6.mp3").PlaySound();
 
-						User.Clear();
-						Simon.Clear();
+			//            User.Clear();
+			//            Simon.Clear();
 
-						1700.AtDelay(
-							delegate
-							{
-								n.Image.Hide();
-								GoForward();
-							}
-						);
-					}
+			//            1700.AtDelay(
+			//                delegate
+			//                {
+			//                    n.Image.Hide();
+			//                    GoForward();
+			//                }
+			//            );
+			//        }
 
 
-				};
+			//    };
 		}
 
 		public void Dispose()

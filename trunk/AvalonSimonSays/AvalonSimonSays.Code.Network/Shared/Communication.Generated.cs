@@ -24,14 +24,6 @@ namespace AvalonSimonSays.Code.Network.Shared
             Server_UserLeft,
             UserHello,
             UserSynced,
-            KeyStateChanged,
-            UserKeyStateChanged,
-            TeleportTo,
-            UserTeleportTo,
-            RemoveLocalPlayer,
-            UserRemoveLocalPlayer,
-            EditorSelector,
-            UserEditorSelector,
             SyncFrame,
             UserSyncFrame,
             SyncFrameEcho,
@@ -40,12 +32,12 @@ namespace AvalonSimonSays.Code.Network.Shared
             UserSetPaused,
             ClearPaused,
             UserClearPaused,
-            LoadLevel,
-            UserLoadLevel,
-            LoadLevelHint,
-            UserLoadLevelHint,
             MouseMove,
             UserMouseMove,
+            UserEnqueueSimon,
+            UserEnqueueUser,
+            ClickOption,
+            UserClickOption,
         }
         #endregion
 
@@ -66,14 +58,6 @@ namespace AvalonSimonSays.Code.Network.Shared
             event Action<RemoteEvents.Server_UserLeftArguments> Server_UserLeft;
             event Action<RemoteEvents.UserHelloArguments> UserHello;
             event Action<RemoteEvents.UserSyncedArguments> UserSynced;
-            event Action<RemoteEvents.KeyStateChangedArguments> KeyStateChanged;
-            event Action<RemoteEvents.UserKeyStateChangedArguments> UserKeyStateChanged;
-            event Action<RemoteEvents.TeleportToArguments> TeleportTo;
-            event Action<RemoteEvents.UserTeleportToArguments> UserTeleportTo;
-            event Action<RemoteEvents.RemoveLocalPlayerArguments> RemoveLocalPlayer;
-            event Action<RemoteEvents.UserRemoveLocalPlayerArguments> UserRemoveLocalPlayer;
-            event Action<RemoteEvents.EditorSelectorArguments> EditorSelector;
-            event Action<RemoteEvents.UserEditorSelectorArguments> UserEditorSelector;
             event Action<RemoteEvents.SyncFrameArguments> SyncFrame;
             event Action<RemoteEvents.UserSyncFrameArguments> UserSyncFrame;
             event Action<RemoteEvents.SyncFrameEchoArguments> SyncFrameEcho;
@@ -82,12 +66,12 @@ namespace AvalonSimonSays.Code.Network.Shared
             event Action<RemoteEvents.UserSetPausedArguments> UserSetPaused;
             event Action<RemoteEvents.ClearPausedArguments> ClearPaused;
             event Action<RemoteEvents.UserClearPausedArguments> UserClearPaused;
-            event Action<RemoteEvents.LoadLevelArguments> LoadLevel;
-            event Action<RemoteEvents.UserLoadLevelArguments> UserLoadLevel;
-            event Action<RemoteEvents.LoadLevelHintArguments> LoadLevelHint;
-            event Action<RemoteEvents.UserLoadLevelHintArguments> UserLoadLevelHint;
             event Action<RemoteEvents.MouseMoveArguments> MouseMove;
             event Action<RemoteEvents.UserMouseMoveArguments> UserMouseMove;
+            event Action<RemoteEvents.UserEnqueueSimonArguments> UserEnqueueSimon;
+            event Action<RemoteEvents.UserEnqueueUserArguments> UserEnqueueUser;
+            event Action<RemoteEvents.ClickOptionArguments> ClickOption;
+            event Action<RemoteEvents.UserClickOptionArguments> UserClickOption;
         }
         #endregion
 
@@ -174,118 +158,6 @@ namespace AvalonSimonSays.Code.Network.Shared
                     foreach (var Target__ in this.VirtualTargets())
                     {
                         Target__.UserSynced(user, frame);
-                    }
-                }
-            }
-            public void KeyStateChanged(int local, int frame, int key, int state)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.KeyStateChanged, args = new object[] { local, frame, key, state } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.KeyStateChanged(local, frame, key, state);
-                    }
-                }
-            }
-            public void UserKeyStateChanged(int user, int local, int frame, int key, int state)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.UserKeyStateChanged, args = new object[] { user, local, frame, key, state } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.UserKeyStateChanged(user, local, frame, key, state);
-                    }
-                }
-            }
-            public void TeleportTo(int frame, int local, int port, double x, double y, double vx, double vy)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.TeleportTo, args = new object[] { frame, local, port, x, y, vx, vy } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.TeleportTo(frame, local, port, x, y, vx, vy);
-                    }
-                }
-            }
-            public void UserTeleportTo(int user, int frame, int local, int port, double x, double y, double vx, double vy)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.UserTeleportTo, args = new object[] { user, frame, local, port, x, y, vx, vy } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.UserTeleportTo(user, frame, local, port, x, y, vx, vy);
-                    }
-                }
-            }
-            public void RemoveLocalPlayer(int frame, int local)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.RemoveLocalPlayer, args = new object[] { frame, local } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.RemoveLocalPlayer(frame, local);
-                    }
-                }
-            }
-            public void UserRemoveLocalPlayer(int user, int frame, int local)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.UserRemoveLocalPlayer, args = new object[] { user, frame, local } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.UserRemoveLocalPlayer(user, frame, local);
-                    }
-                }
-            }
-            public void EditorSelector(int frame, int port, int type, int size, int x, int y)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.EditorSelector, args = new object[] { frame, port, type, size, x, y } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.EditorSelector(frame, port, type, size, x, y);
-                    }
-                }
-            }
-            public void UserEditorSelector(int user, int frame, int port, int type, int size, int x, int y)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.UserEditorSelector, args = new object[] { user, frame, port, type, size, x, y } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.UserEditorSelector(user, frame, port, type, size, x, y);
                     }
                 }
             }
@@ -401,62 +273,6 @@ namespace AvalonSimonSays.Code.Network.Shared
                     }
                 }
             }
-            public void LoadLevel(int frame, int port, int level, string custom)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.LoadLevel, args = new object[] { frame, port, level, custom } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.LoadLevel(frame, port, level, custom);
-                    }
-                }
-            }
-            public void UserLoadLevel(int user, int port, int frame, int level, string custom)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.UserLoadLevel, args = new object[] { user, port, frame, level, custom } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.UserLoadLevel(user, port, frame, level, custom);
-                    }
-                }
-            }
-            public void LoadLevelHint(int port)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.LoadLevelHint, args = new object[] { port } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.LoadLevelHint(port);
-                    }
-                }
-            }
-            public void UserLoadLevelHint(int user, int port)
-            {
-                if (this.Send != null)
-                {
-                    Send(new SendArguments { i = Messages.UserLoadLevelHint, args = new object[] { user, port } });
-                }
-                if (this.VirtualTargets != null)
-                {
-                    foreach (var Target__ in this.VirtualTargets())
-                    {
-                        Target__.UserLoadLevelHint(user, port);
-                    }
-                }
-            }
             public void MouseMove(double x, double y)
             {
                 if (this.Send != null)
@@ -482,6 +298,62 @@ namespace AvalonSimonSays.Code.Network.Shared
                     foreach (var Target__ in this.VirtualTargets())
                     {
                         Target__.UserMouseMove(user, x, y);
+                    }
+                }
+            }
+            public void UserEnqueueSimon(int user, int option)
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.UserEnqueueSimon, args = new object[] { user, option } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.UserEnqueueSimon(user, option);
+                    }
+                }
+            }
+            public void UserEnqueueUser(int user, int option)
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.UserEnqueueUser, args = new object[] { user, option } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.UserEnqueueUser(user, option);
+                    }
+                }
+            }
+            public void ClickOption(int frame, int option)
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.ClickOption, args = new object[] { frame, option } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.ClickOption(frame, option);
+                    }
+                }
+            }
+            public void UserClickOption(int user, int frame, int option)
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.UserClickOption, args = new object[] { user, frame, option } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.UserClickOption(user, frame, option);
                     }
                 }
             }
@@ -539,52 +411,26 @@ namespace AvalonSimonSays.Code.Network.Shared
                 #region Automatic Event Routing
                 public void CombineDelegates(IEvents value)
                 {
-                    value.KeyStateChanged += this.UserKeyStateChanged;
-                    value.TeleportTo += this.UserTeleportTo;
-                    value.RemoveLocalPlayer += this.UserRemoveLocalPlayer;
-                    value.EditorSelector += this.UserEditorSelector;
                     value.SyncFrame += this.UserSyncFrame;
                     value.SyncFrameEcho += this.UserSyncFrameEcho;
                     value.SetPaused += this.UserSetPaused;
                     value.ClearPaused += this.UserClearPaused;
-                    value.LoadLevel += this.UserLoadLevel;
-                    value.LoadLevelHint += this.UserLoadLevelHint;
                     value.MouseMove += this.UserMouseMove;
+                    value.ClickOption += this.UserClickOption;
                 }
 
                 public void RemoveDelegates(IEvents value)
                 {
-                    value.KeyStateChanged -= this.UserKeyStateChanged;
-                    value.TeleportTo -= this.UserTeleportTo;
-                    value.RemoveLocalPlayer -= this.UserRemoveLocalPlayer;
-                    value.EditorSelector -= this.UserEditorSelector;
                     value.SyncFrame -= this.UserSyncFrame;
                     value.SyncFrameEcho -= this.UserSyncFrameEcho;
                     value.SetPaused -= this.UserSetPaused;
                     value.ClearPaused -= this.UserClearPaused;
-                    value.LoadLevel -= this.UserLoadLevel;
-                    value.LoadLevelHint -= this.UserLoadLevelHint;
                     value.MouseMove -= this.UserMouseMove;
+                    value.ClickOption -= this.UserClickOption;
                 }
                 #endregion
 
                 #region Routing
-                public void UserKeyStateChanged(KeyStateChangedArguments e)
-                {
-                    Target.UserKeyStateChanged(this.user, e.local, e.frame, e.key, e.state);
-                }
-                public void UserTeleportTo(TeleportToArguments e)
-                {
-                    Target.UserTeleportTo(this.user, e.frame, e.local, e.port, e.x, e.y, e.vx, e.vy);
-                }
-                public void UserRemoveLocalPlayer(RemoveLocalPlayerArguments e)
-                {
-                    Target.UserRemoveLocalPlayer(this.user, e.frame, e.local);
-                }
-                public void UserEditorSelector(EditorSelectorArguments e)
-                {
-                    Target.UserEditorSelector(this.user, e.frame, e.port, e.type, e.size, e.x, e.y);
-                }
                 public void UserSyncFrame(SyncFrameArguments e)
                 {
                     Target.UserSyncFrame(this.user, e.frame, e.framerate);
@@ -601,17 +447,13 @@ namespace AvalonSimonSays.Code.Network.Shared
                 {
                     Target.UserClearPaused(this.user);
                 }
-                public void UserLoadLevel(LoadLevelArguments e)
-                {
-                    Target.UserLoadLevel(this.user, e.port, e.frame, e.level, e.custom);
-                }
-                public void UserLoadLevelHint(LoadLevelHintArguments e)
-                {
-                    Target.UserLoadLevelHint(this.user, e.port);
-                }
                 public void UserMouseMove(MouseMoveArguments e)
                 {
                     Target.UserMouseMove(this.user, e.x, e.y);
+                }
+                public void UserClickOption(ClickOptionArguments e)
+                {
+                    Target.UserClickOption(this.user, e.frame, e.option);
                 }
                 #endregion
             }
@@ -638,38 +480,6 @@ namespace AvalonSimonSays.Code.Network.Shared
                 public void UserSynced(UserSyncedArguments e)
                 {
                     this.Target.UserSynced(this.user, e.frame);
-                }
-                public void UserKeyStateChanged(int local, int frame, int key, int state)
-                {
-                    this.Target.UserKeyStateChanged(this.user, local, frame, key, state);
-                }
-                public void UserKeyStateChanged(UserKeyStateChangedArguments e)
-                {
-                    this.Target.UserKeyStateChanged(this.user, e.local, e.frame, e.key, e.state);
-                }
-                public void UserTeleportTo(int frame, int local, int port, double x, double y, double vx, double vy)
-                {
-                    this.Target.UserTeleportTo(this.user, frame, local, port, x, y, vx, vy);
-                }
-                public void UserTeleportTo(UserTeleportToArguments e)
-                {
-                    this.Target.UserTeleportTo(this.user, e.frame, e.local, e.port, e.x, e.y, e.vx, e.vy);
-                }
-                public void UserRemoveLocalPlayer(int frame, int local)
-                {
-                    this.Target.UserRemoveLocalPlayer(this.user, frame, local);
-                }
-                public void UserRemoveLocalPlayer(UserRemoveLocalPlayerArguments e)
-                {
-                    this.Target.UserRemoveLocalPlayer(this.user, e.frame, e.local);
-                }
-                public void UserEditorSelector(int frame, int port, int type, int size, int x, int y)
-                {
-                    this.Target.UserEditorSelector(this.user, frame, port, type, size, x, y);
-                }
-                public void UserEditorSelector(UserEditorSelectorArguments e)
-                {
-                    this.Target.UserEditorSelector(this.user, e.frame, e.port, e.type, e.size, e.x, e.y);
                 }
                 public void UserSyncFrame(int frame, int framerate)
                 {
@@ -703,22 +513,6 @@ namespace AvalonSimonSays.Code.Network.Shared
                 {
                     this.Target.UserClearPaused(this.user);
                 }
-                public void UserLoadLevel(int port, int frame, int level, string custom)
-                {
-                    this.Target.UserLoadLevel(this.user, port, frame, level, custom);
-                }
-                public void UserLoadLevel(UserLoadLevelArguments e)
-                {
-                    this.Target.UserLoadLevel(this.user, e.port, e.frame, e.level, e.custom);
-                }
-                public void UserLoadLevelHint(int port)
-                {
-                    this.Target.UserLoadLevelHint(this.user, port);
-                }
-                public void UserLoadLevelHint(UserLoadLevelHintArguments e)
-                {
-                    this.Target.UserLoadLevelHint(this.user, e.port);
-                }
                 public void UserMouseMove(double x, double y)
                 {
                     this.Target.UserMouseMove(this.user, x, y);
@@ -726,6 +520,30 @@ namespace AvalonSimonSays.Code.Network.Shared
                 public void UserMouseMove(UserMouseMoveArguments e)
                 {
                     this.Target.UserMouseMove(this.user, e.x, e.y);
+                }
+                public void UserEnqueueSimon(int option)
+                {
+                    this.Target.UserEnqueueSimon(this.user, option);
+                }
+                public void UserEnqueueSimon(UserEnqueueSimonArguments e)
+                {
+                    this.Target.UserEnqueueSimon(this.user, e.option);
+                }
+                public void UserEnqueueUser(int option)
+                {
+                    this.Target.UserEnqueueUser(this.user, option);
+                }
+                public void UserEnqueueUser(UserEnqueueUserArguments e)
+                {
+                    this.Target.UserEnqueueUser(this.user, e.option);
+                }
+                public void UserClickOption(int frame, int option)
+                {
+                    this.Target.UserClickOption(this.user, frame, option);
+                }
+                public void UserClickOption(UserClickOptionArguments e)
+                {
+                    this.Target.UserClickOption(this.user, e.frame, e.option);
                 }
                 #endregion
             }
@@ -742,34 +560,28 @@ namespace AvalonSimonSays.Code.Network.Shared
                 {
                     value.UserHello += this.UserHello;
                     value.UserSynced += this.UserSynced;
-                    value.UserKeyStateChanged += this.UserKeyStateChanged;
-                    value.UserTeleportTo += this.UserTeleportTo;
-                    value.UserRemoveLocalPlayer += this.UserRemoveLocalPlayer;
-                    value.UserEditorSelector += this.UserEditorSelector;
                     value.UserSyncFrame += this.UserSyncFrame;
                     value.UserSyncFrameEcho += this.UserSyncFrameEcho;
                     value.UserSetPaused += this.UserSetPaused;
                     value.UserClearPaused += this.UserClearPaused;
-                    value.UserLoadLevel += this.UserLoadLevel;
-                    value.UserLoadLevelHint += this.UserLoadLevelHint;
                     value.UserMouseMove += this.UserMouseMove;
+                    value.UserEnqueueSimon += this.UserEnqueueSimon;
+                    value.UserEnqueueUser += this.UserEnqueueUser;
+                    value.UserClickOption += this.UserClickOption;
                 }
 
                 public void RemoveDelegates(IEvents value)
                 {
                     value.UserHello -= this.UserHello;
                     value.UserSynced -= this.UserSynced;
-                    value.UserKeyStateChanged -= this.UserKeyStateChanged;
-                    value.UserTeleportTo -= this.UserTeleportTo;
-                    value.UserRemoveLocalPlayer -= this.UserRemoveLocalPlayer;
-                    value.UserEditorSelector -= this.UserEditorSelector;
                     value.UserSyncFrame -= this.UserSyncFrame;
                     value.UserSyncFrameEcho -= this.UserSyncFrameEcho;
                     value.UserSetPaused -= this.UserSetPaused;
                     value.UserClearPaused -= this.UserClearPaused;
-                    value.UserLoadLevel -= this.UserLoadLevel;
-                    value.UserLoadLevelHint -= this.UserLoadLevelHint;
                     value.UserMouseMove -= this.UserMouseMove;
+                    value.UserEnqueueSimon -= this.UserEnqueueSimon;
+                    value.UserEnqueueUser -= this.UserEnqueueUser;
+                    value.UserClickOption -= this.UserClickOption;
                 }
                 #endregion
 
@@ -785,30 +597,6 @@ namespace AvalonSimonSays.Code.Network.Shared
                     var _target = this.Target(e.user);
                     if (_target == null) return;
                     _target.UserSynced(this.user, e.frame);
-                }
-                public void UserKeyStateChanged(UserKeyStateChangedArguments e)
-                {
-                    var _target = this.Target(e.user);
-                    if (_target == null) return;
-                    _target.UserKeyStateChanged(this.user, e.local, e.frame, e.key, e.state);
-                }
-                public void UserTeleportTo(UserTeleportToArguments e)
-                {
-                    var _target = this.Target(e.user);
-                    if (_target == null) return;
-                    _target.UserTeleportTo(this.user, e.frame, e.local, e.port, e.x, e.y, e.vx, e.vy);
-                }
-                public void UserRemoveLocalPlayer(UserRemoveLocalPlayerArguments e)
-                {
-                    var _target = this.Target(e.user);
-                    if (_target == null) return;
-                    _target.UserRemoveLocalPlayer(this.user, e.frame, e.local);
-                }
-                public void UserEditorSelector(UserEditorSelectorArguments e)
-                {
-                    var _target = this.Target(e.user);
-                    if (_target == null) return;
-                    _target.UserEditorSelector(this.user, e.frame, e.port, e.type, e.size, e.x, e.y);
                 }
                 public void UserSyncFrame(UserSyncFrameArguments e)
                 {
@@ -834,23 +622,29 @@ namespace AvalonSimonSays.Code.Network.Shared
                     if (_target == null) return;
                     _target.UserClearPaused(this.user);
                 }
-                public void UserLoadLevel(UserLoadLevelArguments e)
-                {
-                    var _target = this.Target(e.user);
-                    if (_target == null) return;
-                    _target.UserLoadLevel(this.user, e.port, e.frame, e.level, e.custom);
-                }
-                public void UserLoadLevelHint(UserLoadLevelHintArguments e)
-                {
-                    var _target = this.Target(e.user);
-                    if (_target == null) return;
-                    _target.UserLoadLevelHint(this.user, e.port);
-                }
                 public void UserMouseMove(UserMouseMoveArguments e)
                 {
                     var _target = this.Target(e.user);
                     if (_target == null) return;
                     _target.UserMouseMove(this.user, e.x, e.y);
+                }
+                public void UserEnqueueSimon(UserEnqueueSimonArguments e)
+                {
+                    var _target = this.Target(e.user);
+                    if (_target == null) return;
+                    _target.UserEnqueueSimon(this.user, e.option);
+                }
+                public void UserEnqueueUser(UserEnqueueUserArguments e)
+                {
+                    var _target = this.Target(e.user);
+                    if (_target == null) return;
+                    _target.UserEnqueueUser(this.user, e.option);
+                }
+                public void UserClickOption(UserClickOptionArguments e)
+                {
+                    var _target = this.Target(e.user);
+                    if (_target == null) return;
+                    _target.UserClickOption(this.user, e.frame, e.option);
                 }
                 #endregion
             }
@@ -930,148 +724,6 @@ namespace AvalonSimonSays.Code.Network.Shared
             }
             #endregion
             public event Action<UserSyncedArguments> UserSynced;
-            #region KeyStateChangedArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class KeyStateChangedArguments
-            {
-                public int local;
-                public int frame;
-                public int key;
-                public int state;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ local = ").Append(this.local).Append(", frame = ").Append(this.frame).Append(", key = ").Append(this.key).Append(", state = ").Append(this.state).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<KeyStateChangedArguments> KeyStateChanged;
-            #region UserKeyStateChangedArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class UserKeyStateChangedArguments : WithUserArguments
-            {
-                public int local;
-                public int frame;
-                public int key;
-                public int state;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", local = ").Append(this.local).Append(", frame = ").Append(this.frame).Append(", key = ").Append(this.key).Append(", state = ").Append(this.state).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<UserKeyStateChangedArguments> UserKeyStateChanged;
-            #region TeleportToArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class TeleportToArguments
-            {
-                public int frame;
-                public int local;
-                public int port;
-                public double x;
-                public double y;
-                public double vx;
-                public double vy;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ frame = ").Append(this.frame).Append(", local = ").Append(this.local).Append(", port = ").Append(this.port).Append(", x = ").Append(this.x).Append(", y = ").Append(this.y).Append(", vx = ").Append(this.vx).Append(", vy = ").Append(this.vy).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<TeleportToArguments> TeleportTo;
-            #region UserTeleportToArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class UserTeleportToArguments : WithUserArguments
-            {
-                public int frame;
-                public int local;
-                public int port;
-                public double x;
-                public double y;
-                public double vx;
-                public double vy;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", frame = ").Append(this.frame).Append(", local = ").Append(this.local).Append(", port = ").Append(this.port).Append(", x = ").Append(this.x).Append(", y = ").Append(this.y).Append(", vx = ").Append(this.vx).Append(", vy = ").Append(this.vy).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<UserTeleportToArguments> UserTeleportTo;
-            #region RemoveLocalPlayerArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class RemoveLocalPlayerArguments
-            {
-                public int frame;
-                public int local;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ frame = ").Append(this.frame).Append(", local = ").Append(this.local).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<RemoveLocalPlayerArguments> RemoveLocalPlayer;
-            #region UserRemoveLocalPlayerArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class UserRemoveLocalPlayerArguments : WithUserArguments
-            {
-                public int frame;
-                public int local;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", frame = ").Append(this.frame).Append(", local = ").Append(this.local).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<UserRemoveLocalPlayerArguments> UserRemoveLocalPlayer;
-            #region EditorSelectorArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class EditorSelectorArguments
-            {
-                public int frame;
-                public int port;
-                public int type;
-                public int size;
-                public int x;
-                public int y;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ frame = ").Append(this.frame).Append(", port = ").Append(this.port).Append(", type = ").Append(this.type).Append(", size = ").Append(this.size).Append(", x = ").Append(this.x).Append(", y = ").Append(this.y).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<EditorSelectorArguments> EditorSelector;
-            #region UserEditorSelectorArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class UserEditorSelectorArguments : WithUserArguments
-            {
-                public int frame;
-                public int port;
-                public int type;
-                public int size;
-                public int x;
-                public int y;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", frame = ").Append(this.frame).Append(", port = ").Append(this.port).Append(", type = ").Append(this.type).Append(", size = ").Append(this.size).Append(", x = ").Append(this.x).Append(", y = ").Append(this.y).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<UserEditorSelectorArguments> UserEditorSelector;
             #region SyncFrameArguments
             [Script]
             [CompilerGenerated]
@@ -1186,68 +838,6 @@ namespace AvalonSimonSays.Code.Network.Shared
             }
             #endregion
             public event Action<UserClearPausedArguments> UserClearPaused;
-            #region LoadLevelArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class LoadLevelArguments
-            {
-                public int frame;
-                public int port;
-                public int level;
-                public string custom;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ frame = ").Append(this.frame).Append(", port = ").Append(this.port).Append(", level = ").Append(this.level).Append(", custom = ").Append(this.custom).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<LoadLevelArguments> LoadLevel;
-            #region UserLoadLevelArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class UserLoadLevelArguments : WithUserArguments
-            {
-                public int port;
-                public int frame;
-                public int level;
-                public string custom;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", port = ").Append(this.port).Append(", frame = ").Append(this.frame).Append(", level = ").Append(this.level).Append(", custom = ").Append(this.custom).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<UserLoadLevelArguments> UserLoadLevel;
-            #region LoadLevelHintArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class LoadLevelHintArguments
-            {
-                public int port;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ port = ").Append(this.port).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<LoadLevelHintArguments> LoadLevelHint;
-            #region UserLoadLevelHintArguments
-            [Script]
-            [CompilerGenerated]
-            public sealed partial class UserLoadLevelHintArguments : WithUserArguments
-            {
-                public int port;
-                [DebuggerHidden]
-                public override string ToString()
-                {
-                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", port = ").Append(this.port).Append(" }").ToString();
-                }
-            }
-            #endregion
-            public event Action<UserLoadLevelHintArguments> UserLoadLevelHint;
             #region MouseMoveArguments
             [Script]
             [CompilerGenerated]
@@ -1278,6 +868,64 @@ namespace AvalonSimonSays.Code.Network.Shared
             }
             #endregion
             public event Action<UserMouseMoveArguments> UserMouseMove;
+            #region UserEnqueueSimonArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class UserEnqueueSimonArguments : WithUserArguments
+            {
+                public int option;
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", option = ").Append(this.option).Append(" }").ToString();
+                }
+            }
+            #endregion
+            public event Action<UserEnqueueSimonArguments> UserEnqueueSimon;
+            #region UserEnqueueUserArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class UserEnqueueUserArguments : WithUserArguments
+            {
+                public int option;
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", option = ").Append(this.option).Append(" }").ToString();
+                }
+            }
+            #endregion
+            public event Action<UserEnqueueUserArguments> UserEnqueueUser;
+            #region ClickOptionArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class ClickOptionArguments
+            {
+                public int frame;
+                public int option;
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().Append("{ frame = ").Append(this.frame).Append(", option = ").Append(this.option).Append(" }").ToString();
+                }
+            }
+            #endregion
+            public event Action<ClickOptionArguments> ClickOption;
+            #region UserClickOptionArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class UserClickOptionArguments : WithUserArguments
+            {
+                public int frame;
+                public int option;
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", frame = ").Append(this.frame).Append(", option = ").Append(this.option).Append(" }").ToString();
+                }
+            }
+            #endregion
+            public event Action<UserClickOptionArguments> UserClickOption;
             public RemoteEvents()
             {
                 DispatchTable = new Dictionary<Messages, Action<IDispatchHelper>>
@@ -1287,14 +935,6 @@ namespace AvalonSimonSays.Code.Network.Shared
                             { Messages.Server_UserLeft, e => { Server_UserLeft(new Server_UserLeftArguments { user = e.GetInt32(0), name = e.GetString(1) }); } },
                             { Messages.UserHello, e => { UserHello(new UserHelloArguments { user = e.GetInt32(0), name = e.GetString(1), frame = e.GetInt32(2) }); } },
                             { Messages.UserSynced, e => { UserSynced(new UserSyncedArguments { user = e.GetInt32(0), frame = e.GetInt32(1) }); } },
-                            { Messages.KeyStateChanged, e => { KeyStateChanged(new KeyStateChangedArguments { local = e.GetInt32(0), frame = e.GetInt32(1), key = e.GetInt32(2), state = e.GetInt32(3) }); } },
-                            { Messages.UserKeyStateChanged, e => { UserKeyStateChanged(new UserKeyStateChangedArguments { user = e.GetInt32(0), local = e.GetInt32(1), frame = e.GetInt32(2), key = e.GetInt32(3), state = e.GetInt32(4) }); } },
-                            { Messages.TeleportTo, e => { TeleportTo(new TeleportToArguments { frame = e.GetInt32(0), local = e.GetInt32(1), port = e.GetInt32(2), x = e.GetDouble(3), y = e.GetDouble(4), vx = e.GetDouble(5), vy = e.GetDouble(6) }); } },
-                            { Messages.UserTeleportTo, e => { UserTeleportTo(new UserTeleportToArguments { user = e.GetInt32(0), frame = e.GetInt32(1), local = e.GetInt32(2), port = e.GetInt32(3), x = e.GetDouble(4), y = e.GetDouble(5), vx = e.GetDouble(6), vy = e.GetDouble(7) }); } },
-                            { Messages.RemoveLocalPlayer, e => { RemoveLocalPlayer(new RemoveLocalPlayerArguments { frame = e.GetInt32(0), local = e.GetInt32(1) }); } },
-                            { Messages.UserRemoveLocalPlayer, e => { UserRemoveLocalPlayer(new UserRemoveLocalPlayerArguments { user = e.GetInt32(0), frame = e.GetInt32(1), local = e.GetInt32(2) }); } },
-                            { Messages.EditorSelector, e => { EditorSelector(new EditorSelectorArguments { frame = e.GetInt32(0), port = e.GetInt32(1), type = e.GetInt32(2), size = e.GetInt32(3), x = e.GetInt32(4), y = e.GetInt32(5) }); } },
-                            { Messages.UserEditorSelector, e => { UserEditorSelector(new UserEditorSelectorArguments { user = e.GetInt32(0), frame = e.GetInt32(1), port = e.GetInt32(2), type = e.GetInt32(3), size = e.GetInt32(4), x = e.GetInt32(5), y = e.GetInt32(6) }); } },
                             { Messages.SyncFrame, e => { SyncFrame(new SyncFrameArguments { frame = e.GetInt32(0), framerate = e.GetInt32(1) }); } },
                             { Messages.UserSyncFrame, e => { UserSyncFrame(new UserSyncFrameArguments { user = e.GetInt32(0), frame = e.GetInt32(1), framerate = e.GetInt32(2) }); } },
                             { Messages.SyncFrameEcho, e => { SyncFrameEcho(new SyncFrameEchoArguments { frame = e.GetInt32(0), framerate = e.GetInt32(1) }); } },
@@ -1303,12 +943,12 @@ namespace AvalonSimonSays.Code.Network.Shared
                             { Messages.UserSetPaused, e => { UserSetPaused(new UserSetPausedArguments { user = e.GetInt32(0), frame = e.GetInt32(1) }); } },
                             { Messages.ClearPaused, e => { ClearPaused(new ClearPausedArguments {  }); } },
                             { Messages.UserClearPaused, e => { UserClearPaused(new UserClearPausedArguments { user = e.GetInt32(0) }); } },
-                            { Messages.LoadLevel, e => { LoadLevel(new LoadLevelArguments { frame = e.GetInt32(0), port = e.GetInt32(1), level = e.GetInt32(2), custom = e.GetString(3) }); } },
-                            { Messages.UserLoadLevel, e => { UserLoadLevel(new UserLoadLevelArguments { user = e.GetInt32(0), port = e.GetInt32(1), frame = e.GetInt32(2), level = e.GetInt32(3), custom = e.GetString(4) }); } },
-                            { Messages.LoadLevelHint, e => { LoadLevelHint(new LoadLevelHintArguments { port = e.GetInt32(0) }); } },
-                            { Messages.UserLoadLevelHint, e => { UserLoadLevelHint(new UserLoadLevelHintArguments { user = e.GetInt32(0), port = e.GetInt32(1) }); } },
                             { Messages.MouseMove, e => { MouseMove(new MouseMoveArguments { x = e.GetDouble(0), y = e.GetDouble(1) }); } },
                             { Messages.UserMouseMove, e => { UserMouseMove(new UserMouseMoveArguments { user = e.GetInt32(0), x = e.GetDouble(1), y = e.GetDouble(2) }); } },
+                            { Messages.UserEnqueueSimon, e => { UserEnqueueSimon(new UserEnqueueSimonArguments { user = e.GetInt32(0), option = e.GetInt32(1) }); } },
+                            { Messages.UserEnqueueUser, e => { UserEnqueueUser(new UserEnqueueUserArguments { user = e.GetInt32(0), option = e.GetInt32(1) }); } },
+                            { Messages.ClickOption, e => { ClickOption(new ClickOptionArguments { frame = e.GetInt32(0), option = e.GetInt32(1) }); } },
+                            { Messages.UserClickOption, e => { UserClickOption(new UserClickOptionArguments { user = e.GetInt32(0), frame = e.GetInt32(1), option = e.GetInt32(2) }); } },
                         }
                 ;
                 DispatchTableDelegates = new Dictionary<Messages, Converter<object, Delegate>>
@@ -1318,14 +958,6 @@ namespace AvalonSimonSays.Code.Network.Shared
                             { Messages.Server_UserLeft, e => Server_UserLeft },
                             { Messages.UserHello, e => UserHello },
                             { Messages.UserSynced, e => UserSynced },
-                            { Messages.KeyStateChanged, e => KeyStateChanged },
-                            { Messages.UserKeyStateChanged, e => UserKeyStateChanged },
-                            { Messages.TeleportTo, e => TeleportTo },
-                            { Messages.UserTeleportTo, e => UserTeleportTo },
-                            { Messages.RemoveLocalPlayer, e => RemoveLocalPlayer },
-                            { Messages.UserRemoveLocalPlayer, e => UserRemoveLocalPlayer },
-                            { Messages.EditorSelector, e => EditorSelector },
-                            { Messages.UserEditorSelector, e => UserEditorSelector },
                             { Messages.SyncFrame, e => SyncFrame },
                             { Messages.UserSyncFrame, e => UserSyncFrame },
                             { Messages.SyncFrameEcho, e => SyncFrameEcho },
@@ -1334,12 +966,12 @@ namespace AvalonSimonSays.Code.Network.Shared
                             { Messages.UserSetPaused, e => UserSetPaused },
                             { Messages.ClearPaused, e => ClearPaused },
                             { Messages.UserClearPaused, e => UserClearPaused },
-                            { Messages.LoadLevel, e => LoadLevel },
-                            { Messages.UserLoadLevel, e => UserLoadLevel },
-                            { Messages.LoadLevelHint, e => LoadLevelHint },
-                            { Messages.UserLoadLevelHint, e => UserLoadLevelHint },
                             { Messages.MouseMove, e => MouseMove },
                             { Messages.UserMouseMove, e => UserMouseMove },
+                            { Messages.UserEnqueueSimon, e => UserEnqueueSimon },
+                            { Messages.UserEnqueueUser, e => UserEnqueueUser },
+                            { Messages.ClickOption, e => ClickOption },
+                            { Messages.UserClickOption, e => UserClickOption },
                         }
                 ;
             }
@@ -1443,70 +1075,6 @@ namespace AvalonSimonSays.Code.Network.Shared
                 this.VirtualLatency(() => this.UserSynced(v));
             }
 
-            public event Action<RemoteEvents.KeyStateChangedArguments> KeyStateChanged;
-            void IMessages.KeyStateChanged(int local, int frame, int key, int state)
-            {
-                if(KeyStateChanged == null) return;
-                var v = new RemoteEvents.KeyStateChangedArguments { local = local, frame = frame, key = key, state = state };
-                this.VirtualLatency(() => this.KeyStateChanged(v));
-            }
-
-            public event Action<RemoteEvents.UserKeyStateChangedArguments> UserKeyStateChanged;
-            void IMessages.UserKeyStateChanged(int user, int local, int frame, int key, int state)
-            {
-                if(UserKeyStateChanged == null) return;
-                var v = new RemoteEvents.UserKeyStateChangedArguments { user = user, local = local, frame = frame, key = key, state = state };
-                this.VirtualLatency(() => this.UserKeyStateChanged(v));
-            }
-
-            public event Action<RemoteEvents.TeleportToArguments> TeleportTo;
-            void IMessages.TeleportTo(int frame, int local, int port, double x, double y, double vx, double vy)
-            {
-                if(TeleportTo == null) return;
-                var v = new RemoteEvents.TeleportToArguments { frame = frame, local = local, port = port, x = x, y = y, vx = vx, vy = vy };
-                this.VirtualLatency(() => this.TeleportTo(v));
-            }
-
-            public event Action<RemoteEvents.UserTeleportToArguments> UserTeleportTo;
-            void IMessages.UserTeleportTo(int user, int frame, int local, int port, double x, double y, double vx, double vy)
-            {
-                if(UserTeleportTo == null) return;
-                var v = new RemoteEvents.UserTeleportToArguments { user = user, frame = frame, local = local, port = port, x = x, y = y, vx = vx, vy = vy };
-                this.VirtualLatency(() => this.UserTeleportTo(v));
-            }
-
-            public event Action<RemoteEvents.RemoveLocalPlayerArguments> RemoveLocalPlayer;
-            void IMessages.RemoveLocalPlayer(int frame, int local)
-            {
-                if(RemoveLocalPlayer == null) return;
-                var v = new RemoteEvents.RemoveLocalPlayerArguments { frame = frame, local = local };
-                this.VirtualLatency(() => this.RemoveLocalPlayer(v));
-            }
-
-            public event Action<RemoteEvents.UserRemoveLocalPlayerArguments> UserRemoveLocalPlayer;
-            void IMessages.UserRemoveLocalPlayer(int user, int frame, int local)
-            {
-                if(UserRemoveLocalPlayer == null) return;
-                var v = new RemoteEvents.UserRemoveLocalPlayerArguments { user = user, frame = frame, local = local };
-                this.VirtualLatency(() => this.UserRemoveLocalPlayer(v));
-            }
-
-            public event Action<RemoteEvents.EditorSelectorArguments> EditorSelector;
-            void IMessages.EditorSelector(int frame, int port, int type, int size, int x, int y)
-            {
-                if(EditorSelector == null) return;
-                var v = new RemoteEvents.EditorSelectorArguments { frame = frame, port = port, type = type, size = size, x = x, y = y };
-                this.VirtualLatency(() => this.EditorSelector(v));
-            }
-
-            public event Action<RemoteEvents.UserEditorSelectorArguments> UserEditorSelector;
-            void IMessages.UserEditorSelector(int user, int frame, int port, int type, int size, int x, int y)
-            {
-                if(UserEditorSelector == null) return;
-                var v = new RemoteEvents.UserEditorSelectorArguments { user = user, frame = frame, port = port, type = type, size = size, x = x, y = y };
-                this.VirtualLatency(() => this.UserEditorSelector(v));
-            }
-
             public event Action<RemoteEvents.SyncFrameArguments> SyncFrame;
             void IMessages.SyncFrame(int frame, int framerate)
             {
@@ -1571,38 +1139,6 @@ namespace AvalonSimonSays.Code.Network.Shared
                 this.VirtualLatency(() => this.UserClearPaused(v));
             }
 
-            public event Action<RemoteEvents.LoadLevelArguments> LoadLevel;
-            void IMessages.LoadLevel(int frame, int port, int level, string custom)
-            {
-                if(LoadLevel == null) return;
-                var v = new RemoteEvents.LoadLevelArguments { frame = frame, port = port, level = level, custom = custom };
-                this.VirtualLatency(() => this.LoadLevel(v));
-            }
-
-            public event Action<RemoteEvents.UserLoadLevelArguments> UserLoadLevel;
-            void IMessages.UserLoadLevel(int user, int port, int frame, int level, string custom)
-            {
-                if(UserLoadLevel == null) return;
-                var v = new RemoteEvents.UserLoadLevelArguments { user = user, port = port, frame = frame, level = level, custom = custom };
-                this.VirtualLatency(() => this.UserLoadLevel(v));
-            }
-
-            public event Action<RemoteEvents.LoadLevelHintArguments> LoadLevelHint;
-            void IMessages.LoadLevelHint(int port)
-            {
-                if(LoadLevelHint == null) return;
-                var v = new RemoteEvents.LoadLevelHintArguments { port = port };
-                this.VirtualLatency(() => this.LoadLevelHint(v));
-            }
-
-            public event Action<RemoteEvents.UserLoadLevelHintArguments> UserLoadLevelHint;
-            void IMessages.UserLoadLevelHint(int user, int port)
-            {
-                if(UserLoadLevelHint == null) return;
-                var v = new RemoteEvents.UserLoadLevelHintArguments { user = user, port = port };
-                this.VirtualLatency(() => this.UserLoadLevelHint(v));
-            }
-
             public event Action<RemoteEvents.MouseMoveArguments> MouseMove;
             void IMessages.MouseMove(double x, double y)
             {
@@ -1619,9 +1155,41 @@ namespace AvalonSimonSays.Code.Network.Shared
                 this.VirtualLatency(() => this.UserMouseMove(v));
             }
 
+            public event Action<RemoteEvents.UserEnqueueSimonArguments> UserEnqueueSimon;
+            void IMessages.UserEnqueueSimon(int user, int option)
+            {
+                if(UserEnqueueSimon == null) return;
+                var v = new RemoteEvents.UserEnqueueSimonArguments { user = user, option = option };
+                this.VirtualLatency(() => this.UserEnqueueSimon(v));
+            }
+
+            public event Action<RemoteEvents.UserEnqueueUserArguments> UserEnqueueUser;
+            void IMessages.UserEnqueueUser(int user, int option)
+            {
+                if(UserEnqueueUser == null) return;
+                var v = new RemoteEvents.UserEnqueueUserArguments { user = user, option = option };
+                this.VirtualLatency(() => this.UserEnqueueUser(v));
+            }
+
+            public event Action<RemoteEvents.ClickOptionArguments> ClickOption;
+            void IMessages.ClickOption(int frame, int option)
+            {
+                if(ClickOption == null) return;
+                var v = new RemoteEvents.ClickOptionArguments { frame = frame, option = option };
+                this.VirtualLatency(() => this.ClickOption(v));
+            }
+
+            public event Action<RemoteEvents.UserClickOptionArguments> UserClickOption;
+            void IMessages.UserClickOption(int user, int frame, int option)
+            {
+                if(UserClickOption == null) return;
+                var v = new RemoteEvents.UserClickOptionArguments { user = user, frame = frame, option = option };
+                this.VirtualLatency(() => this.UserClickOption(v));
+            }
+
         }
         #endregion
     }
     #endregion
 }
-// 24.01.2009 15:11:32
+// 24.01.2009 15:49:26

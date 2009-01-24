@@ -230,12 +230,16 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 							// there is some catching up to do
 							// like we need to tell it about our locals
 
-							
-
 							if (EgoIsPrimate)
 							{
+								this.Content.Simon.Select(k => this.Content.Options.IndexOf(k)).ForEach(
+									option => this.Messages.UserEnqueueSimon(e.user, option)
+								);
 
-								
+								this.Content.User.Select(k => this.Content.Options.IndexOf(k)).ForEach(
+									option => this.Messages.UserEnqueueSimon(e.user, option)
+								);
+
 							}
 
 							this.Messages.UserSynced(
@@ -422,6 +426,55 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 				};
 			#endregion
 
+			this.Events.UserEnqueueSimon +=
+				e =>
+				{
+					this.Content.Simon.Enqueue(this.Content.Options.AtModulus(e.option));
+				};
+
+			this.Events.UserEnqueueUser +=
+				e =>
+				{
+					this.Content.User.Enqueue(this.Content.Options.AtModulus(e.option));
+				};
+
+			#region Sync_ClickOption
+			var Sync_ClickOption = this.Content.Sync_ClickOption;
+
+			this.Events.UserClickOption +=
+				e =>
+				{
+					var c = this[e.user];
+
+					this.Content.LocalIdentity.HandleFrame(e.frame,
+						delegate
+						{
+							Sync_ClickOption(e.option);
+						},
+						delegate
+						{
+							//this.Content.Console.WriteLine("UserTeleportTo desync " + e);
+						}
+					);
+				};
+
+			this.Content.Sync_ClickOption =
+				(int option) =>
+				{
+					var FutureFrame = this.Content.LocalIdentity.HandleFutureFrame(
+						delegate
+						{
+							// do a local teleport in the future
+							Sync_ClickOption(option);
+						}
+					);
+
+					this.Messages.ClickOption(FutureFrame, option);
+				};
+			#endregion
+
+
+
 			//#region UserLoadLevelHint
 			//this.Content.Sync_RemoteOnly_LoadLevelHint =
 			//    (int port) =>
@@ -440,40 +493,7 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 			//#endregion
 
 
-			//#region Sync_LoadLevel
-			//var Sync_LoadLevel = this.Content.Sync_LoadLevel;
-
-			//this.Events.UserLoadLevel +=
-			//    e =>
-			//    {
-			//        var c = this[e.user];
-
-			//        this.Content.LocalIdentity.HandleFrame(e.frame,
-			//            delegate
-			//            {
-			//                Sync_LoadLevel(e.port, e.level, e.custom);
-			//            },
-			//            delegate
-			//            {
-			//                this.Content.Console.WriteLine("UserTeleportTo desync " + e);
-			//            }
-			//        );
-			//    };
-
-			//this.Content.Sync_LoadLevel =
-			//    (int port, int level, string custom) =>
-			//    {
-			//        var FutureFrame = this.Content.LocalIdentity.HandleFutureFrame(
-			//            delegate
-			//            {
-			//                // do a local teleport in the future
-			//                Sync_LoadLevel(port, level, custom);
-			//            }
-			//        );
-
-			//        this.Messages.LoadLevel(FutureFrame, port, level, custom);
-			//    };
-			//#endregion
+			
 
 			//#region Sync_EditorSelector
 			//var Sync_EditorSelector = this.Content.Sync_EditorSelector;
