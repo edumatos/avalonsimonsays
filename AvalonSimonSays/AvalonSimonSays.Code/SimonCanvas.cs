@@ -229,6 +229,12 @@ namespace AvalonSimonSays.Code
 			this.Sync_ClickOption =
 				option =>
 				{
+					if (Simon.Count == 0)
+					{
+						Message("desync!");
+						return;
+					}
+
 					var Option = Options.AtModulus(option);
 
 					var n = Simon.Dequeue();
@@ -239,7 +245,7 @@ namespace AvalonSimonSays.Code
 						User.Enqueue(n);
 						n.Play(null);
 
-					
+
 						if (Simon.Count == 0)
 						{
 							MyHighestScore = User.Count.Max(MyHighestScore);
@@ -278,7 +284,10 @@ namespace AvalonSimonSays.Code
 							value.Play(
 								delegate
 								{
-									200.AtDelay(next);
+									this.LocalIdentity.HandleFutureFrame(
+										DefaultFramerate / 2,
+										next
+									);
 								}
 							);
 						}
@@ -299,7 +308,7 @@ namespace AvalonSimonSays.Code
 
 		private void ShowFailure(Option n)
 		{
-			var FailureText = 
+			var FailureText =
 @"Awww....
 So close!
 Yikes!
@@ -324,6 +333,15 @@ Consentrate!
 Think!
 Watch it!
 Try harder!
+Utter failure!
+Excellent... Not!
+Why would you do that?
+Try not to loose!
+Suck less, please!
+A real winner!
+Looser!
+Will ya?
+What?!?
 ";
 
 			Message(FailureText.Split(Environment.NewLine).Random());
@@ -358,7 +376,8 @@ Try harder!
 			200.AtDelay(n.Image.Hide);
 			300.AtDelay(n.Image.Show);
 
-			2400.AtDelay(
+			this.LocalIdentity.HandleFutureFrame(
+				2 * DefaultFramerate,
 				delegate
 				{
 					Score.Text = "score: 0\nmy highest: " + MyHighestScore;
@@ -366,6 +385,8 @@ Try harder!
 					GoForward();
 				}
 			);
+
+
 		}
 
 
@@ -377,7 +398,8 @@ Try harder!
 
 			if (LocalIdentityIsPrimate)
 			{
-				1000.AtDelay(
+				this.LocalIdentity.HandleFutureFrame(
+					1000 / DefaultFramerate,
 					delegate
 					{
 						this.Sync_SimonOption(Options.RandomIndex());
@@ -392,7 +414,16 @@ Try harder!
 
 			GoForward();
 
-			this.Message("Welcome to Avalon Simon Says!");
+			this.Message(Promotion.Info.Title);
+
+			this.LocalIdentity.HandleFutureFrame(
+				2 * DefaultFramerate,
+				delegate
+				{
+					this.Message(Promotion.Info.Description);
+				}
+			);
+
 		}
 
 		public void Dispose()

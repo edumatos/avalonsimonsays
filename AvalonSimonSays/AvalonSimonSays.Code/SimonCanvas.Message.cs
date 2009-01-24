@@ -18,6 +18,9 @@ namespace AvalonSimonSays.Code
 	{
 		public void Message(string Text)
 		{
+			if (string.IsNullOrEmpty(Text))
+				return;
+
 			var Height = 40;
 
 			var Car = new Canvas
@@ -30,14 +33,15 @@ namespace AvalonSimonSays.Code
 				(edge, opacity) =>
 				{
 					var _x = DefaultWidth * edge;
+					var _y = 0;
 
 					new Rectangle
 					{
 						Width = DefaultWidth - _x * 2,
-						Height = Height,
+						Height = Height - _y * 2,
 						Fill = Brushes.Black,
 						Opacity = opacity
-					}.AttachTo(Car).MoveTo(_x, 0);
+					}.AttachTo(Car).MoveTo(_x, _y);
 				};
 
 			for (int i = 1; i < 16; i++)
@@ -60,7 +64,7 @@ namespace AvalonSimonSays.Code
 
 
 			double x = DefaultWidth;
-			double y = (DefaultHeight - Height) / 2;
+			double y = (DefaultHeight - Height) / 2 + 120.Random() - 60;
 
 			Car.MoveTo(x, y);
 			Car.AttachTo(this.InfoLayer);
@@ -68,6 +72,7 @@ namespace AvalonSimonSays.Code
 			(1000 / DefaultFramerate).AtIntervalWithTimer(
 				t =>
 				{
+
 					x -= Math.Abs(x * 0.1).Max(0.5);
 
 					Car.MoveTo(x, y);
