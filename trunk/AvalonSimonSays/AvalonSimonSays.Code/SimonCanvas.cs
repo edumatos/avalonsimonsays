@@ -99,7 +99,7 @@ namespace AvalonSimonSays.Code
 				)
 			);
 
-			var HappySimon = new Image
+			var HappySimonImage = new Image
 			{
 				Stretch = Stretch.Fill,
 				Width = DefaultWidth,
@@ -108,6 +108,7 @@ namespace AvalonSimonSays.Code
 				Visibility = Visibility.Hidden
 			}.AttachTo(this.Content);
 
+			var HappySimon = HappySimonImage.ToAnimatedOpacity();
 
 
 
@@ -127,7 +128,7 @@ namespace AvalonSimonSays.Code
 					1000.AtDelay(
 						delegate
 						{
-							HappySimon.Hide();
+							HappySimon.Opacity = 0;
 
 							Simon.ForEach(
 								(value, next) =>
@@ -166,7 +167,7 @@ namespace AvalonSimonSays.Code
 						{
 							OptionsEnabled = false;
 
-							HappySimon.Show();
+							HappySimon.Opacity = 1;
 
 							while (User.Count > 0)
 							{
