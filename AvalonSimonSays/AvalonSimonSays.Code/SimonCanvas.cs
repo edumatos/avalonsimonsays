@@ -14,8 +14,8 @@ namespace AvalonSimonSays.Code
 	[Script]
 	public class SimonCanvas : Canvas
 	{
-		public const int DefaultWidth = 480;
-		public const int DefaultHeight = 320;
+		public const int DefaultWidth = 600;
+		public const int DefaultHeight = 480;
 
 		public SimonCanvas()
 		{
@@ -24,17 +24,20 @@ namespace AvalonSimonSays.Code
 
 			this.ClipToBounds = true;
 
-			Colors.Blue.ToGradient(Colors.Red, DefaultHeight / 4).Select(
-				(c, i) =>
-					new Rectangle
-					{
-						Fill = new SolidColorBrush(c),
-						Width = DefaultWidth,
-						Height = 4,
-					}.MoveTo(0, i * 4).AttachTo(this)
-			).ToArray();
 
+			var a = new Image
+			{
+				Stretch = Stretch.Fill,
+				Width = DefaultWidth,
+				Height = DefaultHeight,
+				Source = (Assets.Shared.KnownAssets.Path.Assets + "/01.png").ToSource()
+			}.AttachTo(this);
 
+			a.MouseLeftButtonUp +=
+				delegate
+				{
+					(Assets.Shared.KnownAssets.Path.Sounds + "/1.mp3").PlaySound();
+				};
 
 		}
 	}

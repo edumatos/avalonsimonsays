@@ -12,7 +12,7 @@ if '%ERRORLEVEL%' == '-1' (
     goto :eof
 )
 :: Namespace name, type name
-@call :mxmlc AvalonSimonSays/Labs/ActionScript OrcasAvalonApplicationFlash
+@call :mxmlc AvalonSimonSays/Labs/ActionScript LabsFlash
 
 goto :eof
 
