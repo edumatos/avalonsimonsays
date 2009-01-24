@@ -15,7 +15,7 @@ using ScriptCoreLib.Shared.Lambda;
 namespace AvalonSimonSays.Code
 {
 	[Script]
-	public partial class SimonCanvas : Canvas
+	public partial class SimonCanvas : Canvas, IDisposable
 	{
 		public const int DefaultWidth = 600;
 		public const int DefaultHeight = 480;
@@ -25,7 +25,8 @@ namespace AvalonSimonSays.Code
 
 		public readonly BindingList<Option> Options = new BindingList<Option>();
 
-		public readonly PlayerIdentity LocalIdentity;
+		public readonly PlayerIdentity LocalIdentity = new PlayerIdentity { Name = "Local Player" };
+
 
 		public bool OptionsEnabled
 		{
@@ -201,6 +202,10 @@ namespace AvalonSimonSays.Code
 
 					
 				};
+		}
+
+		public void Dispose()
+		{
 		}
 	}
 }
