@@ -45,3 +45,4 @@ I have recorded the steps taken to make this game on this page.
  # In phase 1 allow everybody play at the same time
  # Added messaging
  # Implement turn rules
+ # Add scores and achievements
