@@ -27,3 +27,5 @@ I have recorded the steps taken to make this game on this page.
  # Added bin and obj folders to svn ignore
  # First release build to ensure flash compilation
  # Added sounds
+ # Added images
+ # Created a mashup that looks and sounds like the game
