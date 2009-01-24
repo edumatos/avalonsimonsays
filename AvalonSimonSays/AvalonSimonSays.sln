@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvalonSimonSays.Promotion",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvalonSimonSays.Code.Network", "AvalonSimonSays.Code.Network\AvalonSimonSays.Code.Network.csproj", "{1A9177D6-A7FB-4C52-BB07-135728B50DC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvalonSimonSays.Multiplayer", "AvalonSimonSays.Multiplayer\AvalonSimonSays.Multiplayer.csproj", "{F85F32DD-C434-45F3-8333-E9F138EB74C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{1A9177D6-A7FB-4C52-BB07-135728B50DC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A9177D6-A7FB-4C52-BB07-135728B50DC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A9177D6-A7FB-4C52-BB07-135728B50DC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F85F32DD-C434-45F3-8333-E9F138EB74C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F85F32DD-C434-45F3-8333-E9F138EB74C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F85F32DD-C434-45F3-8333-E9F138EB74C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F85F32DD-C434-45F3-8333-E9F138EB74C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

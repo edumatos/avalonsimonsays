@@ -33,8 +33,8 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 
 
 
-		public const int DefaultWidth = 700;
-		public const int DefaultHeight = 500;
+		public const int DefaultWidth = SimonCanvas.DefaultWidth;
+		public const int DefaultHeight = SimonCanvas.DefaultHeight;
 
 
 		public Canvas Container { get; set; }
