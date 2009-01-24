@@ -13,13 +13,7 @@ namespace AvalonSimonSays.Promotion
 
 		public const string Description = "Follow the pattern of lights and sound as long as you can... if you can!";
 
-
-
-		//public const string FlashGameLicense = "http://www.flashgamelicense.com/view_game.php?game_id=3419";
-
 		public const string Resolution = "800x480";
-
-
 
 		public const string EMail = "dadeval@gmail.com";
 
