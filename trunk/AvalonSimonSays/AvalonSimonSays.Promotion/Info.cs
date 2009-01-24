@@ -22,5 +22,11 @@ namespace AvalonSimonSays.Promotion
 		public const string Blog = "http://zproxy.wordpress.com/";
 
 		public const string Keywords = "simon, multiplayer";
+
+		public const string Newgrounds = "http://www.newgrounds.com/portal/view/480095";
+
+		public const string FlashGameLicense = "http://www.flashgamelicense.com/view_game.php?game_id=4242";
+
+
 	}
 }
