@@ -39,3 +39,4 @@ I have recorded the steps taken to make this game on this page.
  # Add google cadget xml creation
  # Upload multiplayer enabled version to nonoba
  # Upload wrapper to mochiads
+ # Add keyboard support
