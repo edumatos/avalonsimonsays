@@ -9,14 +9,31 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Input;
+using System.ComponentModel;
+using ScriptCoreLib.Shared.Lambda;
 
 namespace AvalonSimonSays.Code
 {
 	[Script]
-	public class SimonCanvas : Canvas
+	public partial class SimonCanvas : Canvas
 	{
 		public const int DefaultWidth = 600;
 		public const int DefaultHeight = 480;
+
+		public readonly Canvas Content;
+		public readonly Canvas Overlay;
+
+		public readonly BindingList<Option> Options = new BindingList<Option>();
+
+		public bool OptionsEnabled
+		{
+			set
+			{
+				Options.ForEach(k => k.Overlay.Show(value));
+			}
+		}
+
+		public event Action<Option> Click;
 
 		public SimonCanvas()
 		{
@@ -25,138 +42,161 @@ namespace AvalonSimonSays.Code
 
 			this.ClipToBounds = true;
 
+			this.Content = new Canvas { Width = DefaultWidth, Height = DefaultHeight }.AttachTo(this);
+			this.Overlay = new Canvas { Width = DefaultWidth, Height = DefaultHeight }.AttachTo(this);
 
-			var a = new Image
+			new Image
 			{
 				Stretch = Stretch.Fill,
 				Width = DefaultWidth,
 				Height = DefaultHeight,
 				Source = (Assets.Shared.KnownAssets.Path.Assets + "/01.png").ToSource()
-			}.AttachTo(this);
+			}.AttachTo(this.Content);
 
-			var Blue = new Image
-			{
-				Stretch = Stretch.Fill,
-				Width = DefaultWidth,
-				Height = DefaultHeight,
-				Source = (Assets.Shared.KnownAssets.Path.Assets + "/02.png").ToSource(),
-				Visibility = Visibility.Hidden
-			}.AttachTo(this);
-
-			var Red = new Image
-			{
-				Stretch = Stretch.Fill,
-				Width = DefaultWidth,
-				Height = DefaultHeight,
-				Source = (Assets.Shared.KnownAssets.Path.Assets + "/03.png").ToSource(),
-				Visibility = Visibility.Hidden
-			}.AttachTo(this);
-
-			var Green = new Image
-			{
-				Stretch = Stretch.Fill,
-				Width = DefaultWidth,
-				Height = DefaultHeight,
-				Source = (Assets.Shared.KnownAssets.Path.Assets + "/04.png").ToSource(),
-				Visibility = Visibility.Hidden
-			}.AttachTo(this);
-
-
-			var Yellow = new Image
-			{
-				Stretch = Stretch.Fill,
-				Width = DefaultWidth,
-				Height = DefaultHeight,
-				Source = (Assets.Shared.KnownAssets.Path.Assets + "/05.png").ToSource(),
-				Visibility = Visibility.Hidden
-			}.AttachTo(this);
-
-
-			var BlueOverlay = new Rectangle
-			{
-				Fill = Brushes.Blue,
-				Opacity = 0,
-				Cursor = Cursors.Hand
-			}.MoveTo(91, 172).SizeTo(193, 162).AttachTo(this);
-
-			BlueOverlay.MouseLeftButtonDown +=
-				delegate
-				{
-					Blue.Show();
-				};
-			BlueOverlay.MouseLeftButtonUp +=
-				delegate
-				{
-					Blue.Hide();
-
-					// green sound
-					(Assets.Shared.KnownAssets.Path.Sounds + "/4.mp3").PlaySound();
-				};
-
-
-			
 		
+			this.Options.ForEachNewOrExistingItem(
+				NewOption =>
+				{
+					NewOption.Image.AttachTo(this.Content);
+					NewOption.Overlay.AttachTo(this.Overlay);
 
-			var RedOverlay = new Rectangle
+					NewOption.Click +=
+						delegate
+						{
+							if (this.Click != null)
+								this.Click(NewOption);
+						};
+				}
+			);
+
+			this.Options.AddRange(
+				new Option(
+					Brushes.Blue,
+					Assets.Shared.KnownAssets.Path.Assets + "/02.png",
+					Assets.Shared.KnownAssets.Path.Sounds + "/4.mp3",
+					91, 172, 193, 162
+				),
+
+				new Option(
+					Brushes.Red,
+					Assets.Shared.KnownAssets.Path.Assets + "/03.png",
+					Assets.Shared.KnownAssets.Path.Sounds + "/5.mp3",
+					98, 40, 193, 120
+				),
+
+				new Option(
+					Brushes.Green,
+					Assets.Shared.KnownAssets.Path.Assets + "/04.png",
+					Assets.Shared.KnownAssets.Path.Sounds + "/3.mp3",
+					309, 44, 190, 114
+				),
+
+				new Option(
+					Brushes.Yellow,
+					Assets.Shared.KnownAssets.Path.Assets + "/05.png",
+					Assets.Shared.KnownAssets.Path.Sounds + "/1.mp3",
+					309, 171, 190, 174
+				)
+			);
+
+			var HappySimon = new Image
 			{
-				Fill = Brushes.Red,
-				Opacity = 0,
-				Cursor = Cursors.Hand
-			}.MoveTo(98, 40).SizeTo(193, 120).AttachTo(this);
+				Stretch = Stretch.Fill,
+				Width = DefaultWidth,
+				Height = DefaultHeight,
+				Source = (Assets.Shared.KnownAssets.Path.Assets + "/06.png").ToSource(),
+				Visibility = Visibility.Hidden
+			}.AttachTo(this.Content);
 
-			RedOverlay.MouseLeftButtonDown +=
+
+
+
+			(Assets.Shared.KnownAssets.Path.Sounds + "/2.mp3").PlaySound();
+
+
+			var Simon = new Queue<Option>();
+			var User = new Queue<Option>();
+
+			Action GoForward =
 				delegate
 				{
-					Red.Show();
+					OptionsEnabled = false;
+
+					Simon.Enqueue(Options.Random());
+
+					1000.AtDelay(
+						delegate
+						{
+							HappySimon.Hide();
+
+							Simon.ForEach(
+								(value, next) =>
+								{
+									value.Play(
+										delegate
+										{
+											200.AtDelay(next);
+										}
+									);
+								}
+							)(
+								delegate
+								{
+									OptionsEnabled = true;
+								}
+							);
+						}
+					);
 				};
-			RedOverlay.MouseLeftButtonUp +=
-				delegate
+
+			GoForward();
+
+			this.Click +=
+				Option =>
 				{
-					Red.Hide();
 
-					(Assets.Shared.KnownAssets.Path.Sounds + "/5.mp3").PlaySound();
-				};
+					var n = Simon.Dequeue();
 
+					if (n == Option)
+					{
+						User.Enqueue(n);
+						n.Play(null);
 
+						if (Simon.Count == 0)
+						{
+							OptionsEnabled = false;
 
-			var GreenOverlay = new Rectangle
-			{
-				Fill = Brushes.Green,
-				Opacity = 0,
-				Cursor = Cursors.Hand
-			}.MoveTo(309, 44).SizeTo(190, 114).AttachTo(this);
+							HappySimon.Show();
 
-			GreenOverlay.MouseLeftButtonDown +=
-				delegate
-				{
-					Green.Show();
-				};
-			GreenOverlay.MouseLeftButtonUp +=
-				delegate
-				{
-					Green.Hide();
+							while (User.Count > 0)
+							{
+								Simon.Enqueue(User.Dequeue());
+							}
 
-					(Assets.Shared.KnownAssets.Path.Sounds + "/3.mp3").PlaySound();
-				};
+							GoForward();
+						}
+					}
+					else
+					{
+						OptionsEnabled = false;
 
-			var YellowOverlay = new Rectangle
-			{
-				Fill = Brushes.Yellow,
-				Opacity = 0,
-				Cursor = Cursors.Hand
-			}.MoveTo(309, 171).SizeTo(190, 174).AttachTo(this);
+						n.Image.Show();
 
-			YellowOverlay.MouseLeftButtonDown +=
-				delegate
-				{
-					Yellow.Show();
-				};
-			YellowOverlay.MouseLeftButtonUp +=
-				delegate
-				{
-					Yellow.Hide();
+						(Assets.Shared.KnownAssets.Path.Sounds + "/6.mp3").PlaySound();
 
-					(Assets.Shared.KnownAssets.Path.Sounds + "/1.mp3").PlaySound();
+						User.Clear();
+						Simon.Clear();
+
+						1700.AtDelay(
+							delegate
+							{
+								n.Image.Hide();
+								GoForward();
+							}
+						);
+					}
+
+					
 				};
 		}
 	}
