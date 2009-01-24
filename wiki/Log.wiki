@@ -42,3 +42,4 @@ I have recorded the steps taken to make this game on this page.
  # Add keyboard support
  # Add synced mouse cursor
  # Add framesync for networking
+ # In phase 1 allow everybody play at the same time
