@@ -15,6 +15,7 @@ namespace AvalonSimonSays.Code
 
 
 		public bool SyncFramePaused;
+		public bool SyncFramePausedSkip;
 
 		// should be larger for laggy networks
 		public int SyncFrameWindow = 6;
