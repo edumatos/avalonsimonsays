@@ -30,5 +30,8 @@ I have recorded the steps taken to make this game on this page.
  # Added images
  # Created a mashup that looks and sounds like the game
  # Add AvalonSimonSays.Promition
- # Add to Nonoba
- # Add to MochiAds
+ # Add to Nonoba to get the public url and wrapper
+ # Add to MochiAds to get the key
+ # Create AvalonSimonSays.Code.Network and disable code optimization
+ # Create AvalonSimonSays.Multiplayer
+ # Create /Public for nonoba swf and dll
