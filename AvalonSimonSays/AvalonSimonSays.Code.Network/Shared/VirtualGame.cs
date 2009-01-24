@@ -21,11 +21,11 @@ namespace AvalonSimonSays.Code.Network.Shared
 		{
 			WriteLine("UserJoined " + player.Username);
 
-
-			//var a100 = new AvailibleAchievement(player.AwardAchievement, "a100");
-			//var a1000 = new AvailibleAchievement(player.AwardAchievement, "a1000");
-			//var a50000 = new AvailibleAchievement(player.AwardAchievement, "a50000");
-			//var aLC = new AvailibleAchievement(player.AwardAchievement, "alc");
+			var five = new AvailibleAchievement(player.AwardAchievement, "five");
+			var eight = new AvailibleAchievement(player.AwardAchievement, "eight");
+			var thirdteen = new AvailibleAchievement(player.AwardAchievement, "thirdteen");
+			var twenty = new AvailibleAchievement(player.AwardAchievement, "twenty");
+			var granny = new AvailibleAchievement(player.AwardAchievement, "granny");
 
 			//var score = 0;
 
@@ -33,12 +33,31 @@ namespace AvalonSimonSays.Code.Network.Shared
 				e =>
 				{
 					player.SetScore("score", e.score);
+
+
+					if (e.score >= 5)
+						five.Give();
+
+					if (e.score >= 8)
+						eight.Give();
+
+					if (e.score >= 13)
+						thirdteen.Give();
+
+					if (e.score >= 20)
+						twenty.Give();
 				};
 
+			int FailCount = 0;
 			player.FromPlayer.Server_AddFail +=
 				e =>
 				{
+					FailCount++;
+
 					player.AddScore("fail", 1);
+
+					if (FailCount >= 20)
+						granny.Give();
 				};
 
 
@@ -64,12 +83,7 @@ namespace AvalonSimonSays.Code.Network.Shared
 			//        aLC.GiveMultiple();
 			//    };
 
-			////var firstblood = new AvailibleAchievement(player.AwardAchievement, "firstblood");
-			////var portalfound = new AvailibleAchievement(player.AwardAchievement, "portalfound");
-			////var getrich = new AvailibleAchievement(player.AwardAchievement, "getrich");
-			////var massacre = new AvailibleAchievement(player.AwardAchievement, "massacre");
-			////var levelup = new AvailibleAchievement(player.AwardAchievement, "levelup");
-
+		
 
 			////var x = AnyOtherUser(player);
 
