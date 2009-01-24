@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SimonCanvas.Message.cs" />
     <Compile Include="SimonCanvas.Think.cs" />
     <Compile Include="SimonCanvas.Arrow.cs" />
     <Compile Include="SimonCanvas.Sync.cs" />
