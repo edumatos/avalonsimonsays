@@ -13,3 +13,13 @@ I have recorded the steps taken to make this game on this page.
  # Created new OrcasAvalonApplication as AvalonSimonSays.Labs
  # Created new OrcasAvalonApplication as AvalonSimonSays.Assets
  # Created new OrcasAvalonApplication as AvalonSimonSays.Code
+ # Removed unneeded items from new projects
+ # Changed AvalonSimonSays.Assets to dll and removed post build events
+ # Changed AvalonSimonSays.Code to dll and removed post build events
+ # Created AvalonSimonSays.Assets/web/assets/AvalonSimonSays.Assets
+ # Created AvalonSimonSays.Assets/web/assets/AvalonSimonSays.Assets.Sounds
+ # Updated known assets
+ # Renamed LabsFlash, LabsDocument and LabsCanvas
+ # Updated flash asset hints
+ # Updated AssemblyInfo
+ # Project build and check in
