@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
+using AvalonSimonSays.Code.Network.Shared;
 using ScriptCoreLib;
 using ScriptCoreLib.Shared.Avalon.Extensions;
 using ScriptCoreLib.Shared.Lambda;
-using System.ComponentModel;
-using System.Diagnostics;
-using AvalonSimonSays.Code.Network.Shared;
 
 namespace AvalonSimonSays.Code.Network.Client.Shared
 {
@@ -149,6 +144,8 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 					{
 						// we do not have to sync to others
 						this.Content.LocalIdentity.SyncFramePaused = false;
+
+						this.Content.StartGame();
 					}
 					else
 					{
@@ -165,6 +162,8 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 
 									// unpause
 									this.Content.LocalIdentity.SyncFramePaused = false;
+
+									this.Content.StartGame();
 								}
 							}
 						);
@@ -384,44 +383,44 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 			//        );
 			//    };
 
-			//#region UserMouseMove
-			//this.Content.Sync_RemoteOnly_MouseMove =
-			//    (int port, double x, double y) =>
-			//    {
-			//        this.Messages.MouseMove(port, x, y);
-			//    };
+			#region UserMouseMove
+			this.Content.Sync_RemoteOnly_MouseMove =
+				(double x, double y) =>
+				{
+					this.Messages.MouseMove(x, y);
+				};
 
-			//this.Events.UserMouseMove +=
-			//    e =>
-			//    {
-			//        var c = this[e];
+			this.Events.UserMouseMove +=
+				e =>
+				{
+					var c = this[e];
 
-			//        // e.port could be used to select a specific editor window
-			//        // for now we ignore it
+					// e.port could be used to select a specific editor window
+					// for now we ignore it
 
-			//        var a = this.Content.Editor.Arrows.SingleOrDefault(k => k.Identity == c);
+					var a = this.Content.Arrows.SingleOrDefault(k => k.Identity == c);
 
-			//        if (a == null)
-			//        {
-			//            a = new Workspace.EditorPort.Arrow
-			//            {
-			//                Identity = c
-			//            };
+					if (a == null)
+					{
+						a = new SimonCanvas.Arrow
+						{
+							Identity = c
+						};
 
-			//            this.Content.Editor.Arrows.Add(a);
+						this.Content.Arrows.Add(a);
 
-			//            this.CoPlayers.ForEachItemDeleted(
-			//                DeletedIdentity =>
-			//                {
-			//                    if (DeletedIdentity == c)
-			//                        this.Content.Editor.Arrows.Remove(a);
-			//                }
-			//            );
-			//        }
+						this.CoPlayers.ForEachItemDeleted(
+							DeletedIdentity =>
+							{
+								if (DeletedIdentity == c)
+									this.Content.Arrows.Remove(a);
+							}
+						);
+					}
 
-			//        a.AnimatedMoveTo(e.x, e.y);
-			//    };
-			//#endregion
+					a.AnimatedMoveTo(e.x, e.y);
+				};
+			#endregion
 
 			//#region UserLoadLevelHint
 			//this.Content.Sync_RemoteOnly_LoadLevelHint =

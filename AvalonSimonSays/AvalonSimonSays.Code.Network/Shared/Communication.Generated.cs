@@ -457,31 +457,31 @@ namespace AvalonSimonSays.Code.Network.Shared
                     }
                 }
             }
-            public void MouseMove(int port, double x, double y)
+            public void MouseMove(double x, double y)
             {
                 if (this.Send != null)
                 {
-                    Send(new SendArguments { i = Messages.MouseMove, args = new object[] { port, x, y } });
+                    Send(new SendArguments { i = Messages.MouseMove, args = new object[] { x, y } });
                 }
                 if (this.VirtualTargets != null)
                 {
                     foreach (var Target__ in this.VirtualTargets())
                     {
-                        Target__.MouseMove(port, x, y);
+                        Target__.MouseMove(x, y);
                     }
                 }
             }
-            public void UserMouseMove(int user, int port, double x, double y)
+            public void UserMouseMove(int user, double x, double y)
             {
                 if (this.Send != null)
                 {
-                    Send(new SendArguments { i = Messages.UserMouseMove, args = new object[] { user, port, x, y } });
+                    Send(new SendArguments { i = Messages.UserMouseMove, args = new object[] { user, x, y } });
                 }
                 if (this.VirtualTargets != null)
                 {
                     foreach (var Target__ in this.VirtualTargets())
                     {
-                        Target__.UserMouseMove(user, port, x, y);
+                        Target__.UserMouseMove(user, x, y);
                     }
                 }
             }
@@ -611,7 +611,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                 }
                 public void UserMouseMove(MouseMoveArguments e)
                 {
-                    Target.UserMouseMove(this.user, e.port, e.x, e.y);
+                    Target.UserMouseMove(this.user, e.x, e.y);
                 }
                 #endregion
             }
@@ -719,13 +719,13 @@ namespace AvalonSimonSays.Code.Network.Shared
                 {
                     this.Target.UserLoadLevelHint(this.user, e.port);
                 }
-                public void UserMouseMove(int port, double x, double y)
+                public void UserMouseMove(double x, double y)
                 {
-                    this.Target.UserMouseMove(this.user, port, x, y);
+                    this.Target.UserMouseMove(this.user, x, y);
                 }
                 public void UserMouseMove(UserMouseMoveArguments e)
                 {
-                    this.Target.UserMouseMove(this.user, e.port, e.x, e.y);
+                    this.Target.UserMouseMove(this.user, e.x, e.y);
                 }
                 #endregion
             }
@@ -850,7 +850,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                 {
                     var _target = this.Target(e.user);
                     if (_target == null) return;
-                    _target.UserMouseMove(this.user, e.port, e.x, e.y);
+                    _target.UserMouseMove(this.user, e.x, e.y);
                 }
                 #endregion
             }
@@ -1253,13 +1253,12 @@ namespace AvalonSimonSays.Code.Network.Shared
             [CompilerGenerated]
             public sealed partial class MouseMoveArguments
             {
-                public int port;
                 public double x;
                 public double y;
                 [DebuggerHidden]
                 public override string ToString()
                 {
-                    return new StringBuilder().Append("{ port = ").Append(this.port).Append(", x = ").Append(this.x).Append(", y = ").Append(this.y).Append(" }").ToString();
+                    return new StringBuilder().Append("{ x = ").Append(this.x).Append(", y = ").Append(this.y).Append(" }").ToString();
                 }
             }
             #endregion
@@ -1269,13 +1268,12 @@ namespace AvalonSimonSays.Code.Network.Shared
             [CompilerGenerated]
             public sealed partial class UserMouseMoveArguments : WithUserArguments
             {
-                public int port;
                 public double x;
                 public double y;
                 [DebuggerHidden]
                 public override string ToString()
                 {
-                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", port = ").Append(this.port).Append(", x = ").Append(this.x).Append(", y = ").Append(this.y).Append(" }").ToString();
+                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", x = ").Append(this.x).Append(", y = ").Append(this.y).Append(" }").ToString();
                 }
             }
             #endregion
@@ -1309,8 +1307,8 @@ namespace AvalonSimonSays.Code.Network.Shared
                             { Messages.UserLoadLevel, e => { UserLoadLevel(new UserLoadLevelArguments { user = e.GetInt32(0), port = e.GetInt32(1), frame = e.GetInt32(2), level = e.GetInt32(3), custom = e.GetString(4) }); } },
                             { Messages.LoadLevelHint, e => { LoadLevelHint(new LoadLevelHintArguments { port = e.GetInt32(0) }); } },
                             { Messages.UserLoadLevelHint, e => { UserLoadLevelHint(new UserLoadLevelHintArguments { user = e.GetInt32(0), port = e.GetInt32(1) }); } },
-                            { Messages.MouseMove, e => { MouseMove(new MouseMoveArguments { port = e.GetInt32(0), x = e.GetDouble(1), y = e.GetDouble(2) }); } },
-                            { Messages.UserMouseMove, e => { UserMouseMove(new UserMouseMoveArguments { user = e.GetInt32(0), port = e.GetInt32(1), x = e.GetDouble(2), y = e.GetDouble(3) }); } },
+                            { Messages.MouseMove, e => { MouseMove(new MouseMoveArguments { x = e.GetDouble(0), y = e.GetDouble(1) }); } },
+                            { Messages.UserMouseMove, e => { UserMouseMove(new UserMouseMoveArguments { user = e.GetInt32(0), x = e.GetDouble(1), y = e.GetDouble(2) }); } },
                         }
                 ;
                 DispatchTableDelegates = new Dictionary<Messages, Converter<object, Delegate>>
@@ -1606,18 +1604,18 @@ namespace AvalonSimonSays.Code.Network.Shared
             }
 
             public event Action<RemoteEvents.MouseMoveArguments> MouseMove;
-            void IMessages.MouseMove(int port, double x, double y)
+            void IMessages.MouseMove(double x, double y)
             {
                 if(MouseMove == null) return;
-                var v = new RemoteEvents.MouseMoveArguments { port = port, x = x, y = y };
+                var v = new RemoteEvents.MouseMoveArguments { x = x, y = y };
                 this.VirtualLatency(() => this.MouseMove(v));
             }
 
             public event Action<RemoteEvents.UserMouseMoveArguments> UserMouseMove;
-            void IMessages.UserMouseMove(int user, int port, double x, double y)
+            void IMessages.UserMouseMove(int user, double x, double y)
             {
                 if(UserMouseMove == null) return;
-                var v = new RemoteEvents.UserMouseMoveArguments { user = user, port = port, x = x, y = y };
+                var v = new RemoteEvents.UserMouseMoveArguments { user = user, x = x, y = y };
                 this.VirtualLatency(() => this.UserMouseMove(v));
             }
 
@@ -1626,4 +1624,4 @@ namespace AvalonSimonSays.Code.Network.Shared
     }
     #endregion
 }
-// 24.01.2009 13:11:24
+// 24.01.2009 15:11:32

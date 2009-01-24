@@ -1,17 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Controls;
-using ScriptCoreLib;
-using ScriptCoreLib.Shared.Avalon.Extensions;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Input;
-using System.ComponentModel;
-using ScriptCoreLib.Shared.Lambda;
 using AvalonSimonSays.Promotion;
+using ScriptCoreLib.Shared.Avalon.Extensions;
 
 namespace AvalonSimonSays.Code
 {

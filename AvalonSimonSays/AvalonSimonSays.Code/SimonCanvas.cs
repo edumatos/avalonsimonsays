@@ -20,6 +20,7 @@ namespace AvalonSimonSays.Code
 		public const int DefaultHeight = 480;
 
 		public readonly Canvas Content;
+		public readonly Canvas InfoLayer;
 		public readonly Canvas Overlay;
 
 		public readonly BindingList<Option> Options = new BindingList<Option>();
@@ -42,6 +43,8 @@ namespace AvalonSimonSays.Code
 
 		public event Action<Option> Click;
 
+		public AnimatedOpacity<Image> HappySimon;
+
 		public SimonCanvas()
 		{
 			Width = DefaultWidth;
@@ -50,6 +53,7 @@ namespace AvalonSimonSays.Code
 			this.ClipToBounds = true;
 
 			this.Content = new Canvas { Width = DefaultWidth, Height = DefaultHeight }.AttachTo(this);
+			this.InfoLayer = new Canvas { Width = DefaultWidth, Height = DefaultHeight }.AttachTo(this);
 			this.Overlay = new Canvas
 			{
 				Width = DefaultWidth,
@@ -57,6 +61,8 @@ namespace AvalonSimonSays.Code
 				Background = Brushes.White,
 				Opacity = 0
 			}.AttachTo(this);
+
+			this.Arrows.AttachTo(this.InfoLayer);
 
 			new Image
 			{
@@ -151,13 +157,28 @@ namespace AvalonSimonSays.Code
 
 
 
-			var HappySimon = HappySimonImage.ToAnimatedOpacity();
+			this.HappySimon = HappySimonImage.ToAnimatedOpacity();
 
 
 			AttachSocialLinks();
 
 
 
+			this.Overlay.MouseMove +=
+				(sender, args) =>
+				{
+					var p = args.GetPosition(this.Overlay);
+
+					if (this.Sync_RemoteOnly_MouseMove != null)
+						this.Sync_RemoteOnly_MouseMove(p.X, p.Y);
+				};
+
+			this.StartThinking();
+
+		}
+
+		public void StartGame()
+		{
 			(Assets.Shared.KnownAssets.Path.Sounds + "/2.mp3").PlaySound();
 
 
