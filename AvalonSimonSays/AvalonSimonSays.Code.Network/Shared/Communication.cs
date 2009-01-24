@@ -19,20 +19,6 @@ namespace AvalonSimonSays.Code.Network.Shared
 			void UserHello(int user, string name, int frame);
 			void UserSynced(int user, int frame);
 
-			void KeyStateChanged(int local, int frame, int key, int state);
-			void UserKeyStateChanged(int user, int local, int frame, int key, int state);
-
-			void TeleportTo(int frame, int local, int port, double x, double y, double vx, double vy);
-			void UserTeleportTo(int user, int frame, int local, int port, double x, double y, double vx, double vy);
-
-
-
-			void RemoveLocalPlayer(int frame, int local);
-			void UserRemoveLocalPlayer(int user, int frame, int local);
-
-
-			void EditorSelector(int frame, int port, int type, int size, int x, int y);
-			void UserEditorSelector(int user, int frame, int port, int type, int size, int x, int y);
 
 			void SyncFrame(int frame, int framerate);
 			void UserSyncFrame(int user, int frame, int framerate);
@@ -41,21 +27,23 @@ namespace AvalonSimonSays.Code.Network.Shared
 			void UserSyncFrameEcho(int user, int frame, int framerate);
 
 
-		
+
 			void SetPaused(int frame);
 			void UserSetPaused(int user, int frame);
 
 			void ClearPaused();
 			void UserClearPaused(int user);
 
-			void LoadLevel(int frame, int port, int level, string custom);
-			void UserLoadLevel(int user, int port, int frame, int level, string custom);
 
-			void LoadLevelHint(int port);
-			void UserLoadLevelHint(int user, int port);
 
 			void MouseMove(double x, double y);
 			void UserMouseMove(int user, double x, double y);
+
+			void UserEnqueueSimon(int user, int option);
+			void UserEnqueueUser(int user, int option);
+
+			void ClickOption(int frame, int option);
+			void UserClickOption(int user, int frame, int option);
 		}
 
 
