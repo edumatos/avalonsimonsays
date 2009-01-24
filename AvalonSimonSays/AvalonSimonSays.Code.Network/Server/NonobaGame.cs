@@ -25,17 +25,13 @@ namespace AvalonSimonSays.Code.Network.Server
 		"Enable mojo",
 		"Enable mojo in game",
 		false)]
-	[GameSetup.String(
-		"password",
-		"Level Password",
-		"Level Password",
-		"")]
-	[GameSetup.Integer(
-		"players",
-		"Local Players",
-		"Local Players",
-		0, 3, 
-		0)]
+
+	[GameSetup.Boolean(
+		"turn",
+		"Disable turn mode",
+		"Players can play without waiting their turn",
+		false)]
+
 	[Script]
 	public class NonobaGame : NonobaGame<NonobaGameUser<VirtualPlayer>>
 	{

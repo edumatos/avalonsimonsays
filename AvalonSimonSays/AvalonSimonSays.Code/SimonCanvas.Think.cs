@@ -47,9 +47,9 @@ namespace AvalonSimonSays.Code
 					StatusText.Text = new
 					{
 						Frame = this.LocalIdentity.SyncFrame,
-						Paused = this.LocalIdentity.SyncFramePaused,
 						Limit = this.LocalIdentity.SyncFrameLimit,
-						Z = 1
+						Simon = this.Simon.Count,
+						User = this.User.Count
 					}.ToString();
 					Think();
 				}

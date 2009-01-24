@@ -23,5 +23,11 @@ namespace AvalonSimonSays.Code
 		[Script]
 		public delegate void DelegateClickOption(int option);
 		public DelegateClickOption Sync_ClickOption;
+
+		[Script]
+		public delegate void DelegateSimonOption(int option);
+		public DelegateSimonOption Sync_SimonOption;
 	}
+
+
 }
