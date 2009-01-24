@@ -11,8 +11,23 @@ if '%ERRORLEVEL%' == '-1' (
     echo jsc failed.
     goto :eof
 )
+
+:: http://msdn.microsoft.com/en-us/library/ms379563(VS.80).aspx
+call "C:\WINDOWS\Microsoft.NET\Framework\v3.5\csc.exe" /debug /out:"..\bin\%ConfigurationName%\web\%1.NonobaServer.dll" /t:library  /recurse:"..\bin\%ConfigurationName%\web\*.cs"  /lib:.. /r:"..\bin\%ConfigurationName%\Nonoba.GameLibrary.dll"
+
+
 :: Namespace name, type name
-@call :mxmlc %1/ActionScript OrcasAvalonApplicationFlash
+@call :mxmlc AvalonSimonSays/Multiplayer/ActionScript NonobaClientFlash
+@call :mxmlc AvalonSimonSays/Multiplayer/ActionScript NonobaClientFlash_Monetized
+
+pushd ..\bin\%ConfigurationName%\web
+
+:: to upload to nonoba and to reference in tests
+copy "*.dll" "../../../../Public/"
+copy "*.pdb" "../../../../Public/"
+copy "*.swf" "../../../../Public/"
+
+popd
 
 goto :eof
 
@@ -20,7 +35,7 @@ goto :eof
 pushd ..\bin\%ConfigurationName%
 
 ::call c:\util\jsc\bin\jsc.exe %TargetFileName%  -as -js
-call c:\util\jsc\bin\jsc.exe %TargetFileName%  -as -js
+call c:\util\jsc\bin\jsc.exe %TargetFileName%  -as -js -cs2
 
 
 popd
