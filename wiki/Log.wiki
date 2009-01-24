@@ -26,3 +26,4 @@ I have recorded the steps taken to make this game on this page.
  # Updated tools/build.bat for actionscript
  # Added bin and obj folders to svn ignore
  # First release build to ensure flash compilation
+ # Added sounds
