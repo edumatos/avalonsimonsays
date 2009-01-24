@@ -120,9 +120,11 @@ namespace AvalonSimonSays.Code.Network.Client.Shared
 					//Content.Console.WriteLine("Server_Hello " + e);
 
 					if (e.turn > 0)
+					{
 						TurnModeDisabled = true;
 
-					this.Content.Message("play without turns!");
+						this.Content.Message("play without turns!");
+					}
 
 					// we have joined the server
 					// now we need to sync up the frames
