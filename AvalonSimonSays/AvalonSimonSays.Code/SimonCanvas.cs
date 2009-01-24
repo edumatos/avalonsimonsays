@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using AvalonSimonSays.Promotion;
 using ScriptCoreLib;
 using ScriptCoreLib.Shared.Avalon.Extensions;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Input;
-using System.ComponentModel;
 using ScriptCoreLib.Shared.Lambda;
-using AvalonSimonSays.Promotion;
+using System.Windows.Input;
+using System.Linq;
 
 namespace AvalonSimonSays.Code
 {
@@ -28,11 +26,16 @@ namespace AvalonSimonSays.Code
 
 		public readonly PlayerIdentity LocalIdentity = new PlayerIdentity { Name = "Local Player" };
 
-
+		bool InternalOptionsEnabled;
 		public bool OptionsEnabled
 		{
+			get
+			{
+				return InternalOptionsEnabled;
+			}
 			set
 			{
+				InternalOptionsEnabled = value;
 				Options.ForEach(k => k.Overlay.Show(value));
 			}
 		}
@@ -47,7 +50,13 @@ namespace AvalonSimonSays.Code
 			this.ClipToBounds = true;
 
 			this.Content = new Canvas { Width = DefaultWidth, Height = DefaultHeight }.AttachTo(this);
-			this.Overlay = new Canvas { Width = DefaultWidth, Height = DefaultHeight }.AttachTo(this);
+			this.Overlay = new Canvas
+			{
+				Width = DefaultWidth,
+				Height = DefaultHeight,
+				Background = Brushes.White,
+				Opacity = 0
+			}.AttachTo(this);
 
 			new Image
 			{
@@ -57,7 +66,7 @@ namespace AvalonSimonSays.Code
 				Source = (Assets.Shared.KnownAssets.Path.Assets + "/01.png").ToSource()
 			}.AttachTo(this.Content);
 
-		
+
 			this.Options.ForEachNewOrExistingItem(
 				NewOption =>
 				{
@@ -76,6 +85,7 @@ namespace AvalonSimonSays.Code
 			this.Options.AddRange(
 				new Option(
 					Brushes.Blue,
+					Key.B,
 					Assets.Shared.KnownAssets.Path.Assets + "/02.png",
 					Assets.Shared.KnownAssets.Path.Sounds + "/4.mp3",
 					91, 172, 193, 162
@@ -83,6 +93,7 @@ namespace AvalonSimonSays.Code
 
 				new Option(
 					Brushes.Red,
+					Key.R,
 					Assets.Shared.KnownAssets.Path.Assets + "/03.png",
 					Assets.Shared.KnownAssets.Path.Sounds + "/5.mp3",
 					98, 40, 193, 120
@@ -90,6 +101,7 @@ namespace AvalonSimonSays.Code
 
 				new Option(
 					Brushes.Green,
+					Key.G,
 					Assets.Shared.KnownAssets.Path.Assets + "/04.png",
 					Assets.Shared.KnownAssets.Path.Sounds + "/3.mp3",
 					309, 44, 190, 114
@@ -97,11 +109,35 @@ namespace AvalonSimonSays.Code
 
 				new Option(
 					Brushes.Yellow,
+					Key.Y,
 					Assets.Shared.KnownAssets.Path.Assets + "/05.png",
 					Assets.Shared.KnownAssets.Path.Sounds + "/1.mp3",
 					309, 171, 190, 174
 				)
 			);
+
+
+			// we are going for the keyboard input
+			// we want to enable the tilde console feature
+			this.Overlay.FocusVisualStyle = null;
+			this.Overlay.Focusable = true;
+			this.Overlay.Focus();
+
+
+			// at this time we should add a local player
+			this.Overlay.MouseLeftButtonDown +=
+				(sender, key_args) =>
+				{
+					this.Overlay.Focus();
+				};
+
+
+			this.Overlay.KeyUp +=
+				(sender, key_args) =>
+				{
+					if (OptionsEnabled)
+						Options.FirstOrDefault(k => k.Key == key_args.Key).Apply(k => k.RaiseClick());
+				};
 
 			var HappySimonImage = new Image
 			{
@@ -118,21 +154,7 @@ namespace AvalonSimonSays.Code
 			var HappySimon = HappySimonImage.ToAnimatedOpacity();
 
 
-			var SocialLinks = new GameSocialLinks(this)
-				{
-					new GameSocialLinks.Button { 
-						Source = (Assets.Shared.KnownAssets.Path.Assets + "/plus_google.png").ToSource(),
-						Width = 62,
-						Height = 17,
-						Hyperlink = new Uri(Info.GoogleGadget.AddLink)
-					},
-					new GameSocialLinks.Button { 
-						Source = (Assets.Shared.KnownAssets.Path.Assets + "/su.png").ToSource(),
-						Width = 16,
-						Height = 16,
-						Hyperlink = new Uri( "http://www.stumbleupon.com/submit?url=" + Info.Nonoba.URL)
-					}
-				};
+			AttachSocialLinks();
 
 
 
@@ -221,7 +243,7 @@ namespace AvalonSimonSays.Code
 						);
 					}
 
-					
+
 				};
 		}
 
