@@ -49,6 +49,8 @@ namespace AvalonSimonSays.Labs.ActionScript
 
 			AvalonSimonSays.Assets.ActionScript.KnownEmbeddedAssets.RegisterTo(Handlers);
 
+			global::ScriptCoreLib.ActionScript.Avalon.Carousel.KnownEmbeddedAssets.RegisterTo(Handlers);
+
 
 			//// assets from referenced assemblies
 			//Handlers.Add(e => global::ScriptCoreLib.ActionScript.Avalon.Cursors.EmbeddedAssets.Default[e]);

@@ -84,6 +84,8 @@ namespace AvalonSimonSays.Multiplayer.ActionScript
 			//AvalonUgh.Game.ActionScript.KnownEmbeddedAssets.RegisterTo(Handlers);
 			AvalonSimonSays.Assets.ActionScript.KnownEmbeddedAssets.RegisterTo(Handlers);
 
+			global::ScriptCoreLib.ActionScript.Avalon.Carousel.KnownEmbeddedAssets.RegisterTo(Handlers);
+
 			//// assets from referenced assemblies
 			Handlers.Add(e => global::ScriptCoreLib.ActionScript.Avalon.Cursors.EmbeddedAssets.Default[e]);
 			//Handlers.Add(e => global::ScriptCoreLib.ActionScript.Avalon.TiledImageButton.Assets.Default[e]);
