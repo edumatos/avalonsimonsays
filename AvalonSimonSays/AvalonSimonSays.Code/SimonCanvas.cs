@@ -203,6 +203,13 @@ namespace AvalonSimonSays.Code
 				};
 
 
+			this.CoPlayers.ForEachNewOrExistingItem(
+				Player => Message(Player.Name + " has joined!")
+			);
+
+			this.CoPlayers.ForEachItemDeleted(
+				Player => Message(Player.Name + " has left!")
+			);
 
 			this.Score = new TextBox
 			{
@@ -287,10 +294,39 @@ namespace AvalonSimonSays.Code
 			this.StartThinking();
 
 			this.OptionsEnabled = false;
+
 		}
 
 		private void ShowFailure(Option n)
 		{
+			var FailureText = 
+@"Awww....
+So close!
+Yikes!
+Miss!
+Wasted!
+Head shot!
+Overkill!
+Too bad!
+You fail!
+¤#%&!
+Dang!
+Verdamt!
+You silly!
+Why did you do that?
+No, the other left!
+Now what?
+Will you ever learn?
+Atleast try!
+Sissy!
+Come on!
+Consentrate!
+Think!
+Watch it!
+Try harder!
+";
+
+			Message(FailureText.Split(Environment.NewLine).Random());
 
 			OptionsEnabled = false;
 
@@ -338,6 +374,7 @@ namespace AvalonSimonSays.Code
 
 		public void GoForward()
 		{
+
 			if (LocalIdentityIsPrimate)
 			{
 				1000.AtDelay(
@@ -354,6 +391,8 @@ namespace AvalonSimonSays.Code
 			(Assets.Shared.KnownAssets.Path.Sounds + "/2.mp3").PlaySound();
 
 			GoForward();
+
+			this.Message("Welcome to Avalon Simon Says!");
 		}
 
 		public void Dispose()
