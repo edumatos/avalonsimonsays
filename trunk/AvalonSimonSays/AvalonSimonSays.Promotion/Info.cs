@@ -20,5 +20,7 @@ namespace AvalonSimonSays.Promotion
 		public const string Author = "Arvo Sulakatko";
 
 		public const string Blog = "http://zproxy.wordpress.com/";
+
+		public const string Keywords = "simon, multiplayer";
 	}
 }
