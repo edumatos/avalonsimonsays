@@ -44,6 +44,9 @@ namespace AvalonSimonSays.Code.Network.Shared
 
 			void ClickOption(int frame, int option);
 			void UserClickOption(int user, int frame, int option);
+
+			void SimonOption(int frame, int option);
+			void UserSimonOption(int user, int frame, int option);
 		}
 
 

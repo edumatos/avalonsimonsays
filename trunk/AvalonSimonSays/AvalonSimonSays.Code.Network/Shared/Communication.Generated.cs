@@ -38,6 +38,8 @@ namespace AvalonSimonSays.Code.Network.Shared
             UserEnqueueUser,
             ClickOption,
             UserClickOption,
+            SimonOption,
+            UserSimonOption,
         }
         #endregion
 
@@ -72,6 +74,8 @@ namespace AvalonSimonSays.Code.Network.Shared
             event Action<RemoteEvents.UserEnqueueUserArguments> UserEnqueueUser;
             event Action<RemoteEvents.ClickOptionArguments> ClickOption;
             event Action<RemoteEvents.UserClickOptionArguments> UserClickOption;
+            event Action<RemoteEvents.SimonOptionArguments> SimonOption;
+            event Action<RemoteEvents.UserSimonOptionArguments> UserSimonOption;
         }
         #endregion
 
@@ -357,6 +361,34 @@ namespace AvalonSimonSays.Code.Network.Shared
                     }
                 }
             }
+            public void SimonOption(int frame, int option)
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.SimonOption, args = new object[] { frame, option } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.SimonOption(frame, option);
+                    }
+                }
+            }
+            public void UserSimonOption(int user, int frame, int option)
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.UserSimonOption, args = new object[] { user, frame, option } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.UserSimonOption(user, frame, option);
+                    }
+                }
+            }
         }
         #endregion
 
@@ -417,6 +449,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                     value.ClearPaused += this.UserClearPaused;
                     value.MouseMove += this.UserMouseMove;
                     value.ClickOption += this.UserClickOption;
+                    value.SimonOption += this.UserSimonOption;
                 }
 
                 public void RemoveDelegates(IEvents value)
@@ -427,6 +460,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                     value.ClearPaused -= this.UserClearPaused;
                     value.MouseMove -= this.UserMouseMove;
                     value.ClickOption -= this.UserClickOption;
+                    value.SimonOption -= this.UserSimonOption;
                 }
                 #endregion
 
@@ -454,6 +488,10 @@ namespace AvalonSimonSays.Code.Network.Shared
                 public void UserClickOption(ClickOptionArguments e)
                 {
                     Target.UserClickOption(this.user, e.frame, e.option);
+                }
+                public void UserSimonOption(SimonOptionArguments e)
+                {
+                    Target.UserSimonOption(this.user, e.frame, e.option);
                 }
                 #endregion
             }
@@ -545,6 +583,14 @@ namespace AvalonSimonSays.Code.Network.Shared
                 {
                     this.Target.UserClickOption(this.user, e.frame, e.option);
                 }
+                public void UserSimonOption(int frame, int option)
+                {
+                    this.Target.UserSimonOption(this.user, frame, option);
+                }
+                public void UserSimonOption(UserSimonOptionArguments e)
+                {
+                    this.Target.UserSimonOption(this.user, e.frame, e.option);
+                }
                 #endregion
             }
             #endregion
@@ -568,6 +614,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                     value.UserEnqueueSimon += this.UserEnqueueSimon;
                     value.UserEnqueueUser += this.UserEnqueueUser;
                     value.UserClickOption += this.UserClickOption;
+                    value.UserSimonOption += this.UserSimonOption;
                 }
 
                 public void RemoveDelegates(IEvents value)
@@ -582,6 +629,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                     value.UserEnqueueSimon -= this.UserEnqueueSimon;
                     value.UserEnqueueUser -= this.UserEnqueueUser;
                     value.UserClickOption -= this.UserClickOption;
+                    value.UserSimonOption -= this.UserSimonOption;
                 }
                 #endregion
 
@@ -645,6 +693,12 @@ namespace AvalonSimonSays.Code.Network.Shared
                     var _target = this.Target(e.user);
                     if (_target == null) return;
                     _target.UserClickOption(this.user, e.frame, e.option);
+                }
+                public void UserSimonOption(UserSimonOptionArguments e)
+                {
+                    var _target = this.Target(e.user);
+                    if (_target == null) return;
+                    _target.UserSimonOption(this.user, e.frame, e.option);
                 }
                 #endregion
             }
@@ -926,6 +980,36 @@ namespace AvalonSimonSays.Code.Network.Shared
             }
             #endregion
             public event Action<UserClickOptionArguments> UserClickOption;
+            #region SimonOptionArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class SimonOptionArguments
+            {
+                public int frame;
+                public int option;
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().Append("{ frame = ").Append(this.frame).Append(", option = ").Append(this.option).Append(" }").ToString();
+                }
+            }
+            #endregion
+            public event Action<SimonOptionArguments> SimonOption;
+            #region UserSimonOptionArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class UserSimonOptionArguments : WithUserArguments
+            {
+                public int frame;
+                public int option;
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", frame = ").Append(this.frame).Append(", option = ").Append(this.option).Append(" }").ToString();
+                }
+            }
+            #endregion
+            public event Action<UserSimonOptionArguments> UserSimonOption;
             public RemoteEvents()
             {
                 DispatchTable = new Dictionary<Messages, Action<IDispatchHelper>>
@@ -949,6 +1033,8 @@ namespace AvalonSimonSays.Code.Network.Shared
                             { Messages.UserEnqueueUser, e => { UserEnqueueUser(new UserEnqueueUserArguments { user = e.GetInt32(0), option = e.GetInt32(1) }); } },
                             { Messages.ClickOption, e => { ClickOption(new ClickOptionArguments { frame = e.GetInt32(0), option = e.GetInt32(1) }); } },
                             { Messages.UserClickOption, e => { UserClickOption(new UserClickOptionArguments { user = e.GetInt32(0), frame = e.GetInt32(1), option = e.GetInt32(2) }); } },
+                            { Messages.SimonOption, e => { SimonOption(new SimonOptionArguments { frame = e.GetInt32(0), option = e.GetInt32(1) }); } },
+                            { Messages.UserSimonOption, e => { UserSimonOption(new UserSimonOptionArguments { user = e.GetInt32(0), frame = e.GetInt32(1), option = e.GetInt32(2) }); } },
                         }
                 ;
                 DispatchTableDelegates = new Dictionary<Messages, Converter<object, Delegate>>
@@ -972,6 +1058,8 @@ namespace AvalonSimonSays.Code.Network.Shared
                             { Messages.UserEnqueueUser, e => UserEnqueueUser },
                             { Messages.ClickOption, e => ClickOption },
                             { Messages.UserClickOption, e => UserClickOption },
+                            { Messages.SimonOption, e => SimonOption },
+                            { Messages.UserSimonOption, e => UserSimonOption },
                         }
                 ;
             }
@@ -1187,9 +1275,25 @@ namespace AvalonSimonSays.Code.Network.Shared
                 this.VirtualLatency(() => this.UserClickOption(v));
             }
 
+            public event Action<RemoteEvents.SimonOptionArguments> SimonOption;
+            void IMessages.SimonOption(int frame, int option)
+            {
+                if(SimonOption == null) return;
+                var v = new RemoteEvents.SimonOptionArguments { frame = frame, option = option };
+                this.VirtualLatency(() => this.SimonOption(v));
+            }
+
+            public event Action<RemoteEvents.UserSimonOptionArguments> UserSimonOption;
+            void IMessages.UserSimonOption(int user, int frame, int option)
+            {
+                if(UserSimonOption == null) return;
+                var v = new RemoteEvents.UserSimonOptionArguments { user = user, frame = frame, option = option };
+                this.VirtualLatency(() => this.UserSimonOption(v));
+            }
+
         }
         #endregion
     }
     #endregion
 }
-// 24.01.2009 15:49:26
+// 24.01.2009 16:18:17
