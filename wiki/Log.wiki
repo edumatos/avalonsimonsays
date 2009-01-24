@@ -1,0 +1,11 @@
+#summary How was this game made?
+
+= Introduction =
+
+I have recorded the steps taken to make this game on this page.
+
+
+= Details =
+
+===2009.01.24===
+ # Created google project
