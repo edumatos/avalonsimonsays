@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Info.cs" />
+    <Compile Include="Info.Flickr.cs" />
+    <Compile Include="Info.GoogleGadget.cs" />
     <Compile Include="Info.MochiAds.cs" />
     <Compile Include="Info.Nonoba.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

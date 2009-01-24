@@ -65,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GameSocialLinks.cs" />
     <Compile Include="PlayerIdentity.cs" />
     <Compile Include="SimonCanvas.Option.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,6 +75,10 @@
     <ProjectReference Include="..\AvalonSimonSays.Assets\AvalonSimonSays.Assets.csproj">
       <Project>{A61F5ADB-BEA5-47F6-B633-C0FEB9059AFA}</Project>
       <Name>AvalonSimonSays.Assets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AvalonSimonSays.Promotion\AvalonSimonSays.Promotion.csproj">
+      <Project>{D3E12DEC-2D21-4A39-B595-1B32BA8A94F7}</Project>
+      <Name>AvalonSimonSays.Promotion</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
