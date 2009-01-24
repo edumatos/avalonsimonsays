@@ -46,3 +46,7 @@ I have recorded the steps taken to make this game on this page.
  # Added messaging
  # Implement turn rules
  # Add scores and achievements
+ # Submit as public release
+ # Submit to NewGrounds
+ # Mark for redistribution at MochiAds
+ # Post a blog post. Done!
