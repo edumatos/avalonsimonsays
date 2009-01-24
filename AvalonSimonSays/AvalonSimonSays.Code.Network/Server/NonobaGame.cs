@@ -20,11 +20,11 @@ namespace AvalonSimonSays.Code.Network.Server
 		}
 	}
 
-	[GameSetup.Boolean(
-		"mojo",
-		"Enable mojo",
-		"Enable mojo in game",
-		false)]
+	//[GameSetup.Boolean(
+	//    "mojo",
+	//    "Enable mojo",
+	//    "Enable mojo in game",
+	//    false)]
 
 	[GameSetup.Boolean(
 	    "turn",
