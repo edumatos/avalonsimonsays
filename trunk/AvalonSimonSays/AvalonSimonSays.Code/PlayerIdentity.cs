@@ -80,6 +80,7 @@ namespace AvalonSimonSays.Code
 			return HandleFutureFrame(0, handler);
 		}
 
+
 		public int HandleFutureFrame(int offset, Action handler)
 		{
 			return HandleFutureFrame(offset, handler, null);
