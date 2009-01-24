@@ -92,6 +92,14 @@
     <EmbeddedResource Include="web\assets\AvalonSimonSays.Assets\plus_google.png" />
     <EmbeddedResource Include="web\assets\AvalonSimonSays.Assets\su.png" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="web\assets\AvalonSimonSays.Asssets.SocialLinks\Preview_FreeCell.png" />
+    <EmbeddedResource Include="web\assets\AvalonSimonSays.Asssets.SocialLinks\Preview_Mahjong.png" />
+    <EmbeddedResource Include="web\assets\AvalonSimonSays.Asssets.SocialLinks\Preview_Minesweeper.png" />
+    <EmbeddedResource Include="web\assets\AvalonSimonSays.Asssets.SocialLinks\Preview_SpaceInvaders.png" />
+    <EmbeddedResource Include="web\assets\AvalonSimonSays.Asssets.SocialLinks\Preview_Spider.png" />
+    <EmbeddedResource Include="web\assets\AvalonSimonSays.Asssets.SocialLinks\Preview_TreasureHunt.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

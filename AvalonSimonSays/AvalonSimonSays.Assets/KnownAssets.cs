@@ -24,6 +24,8 @@ namespace AvalonSimonSays.Assets
 
 				public const string Assets = "assets/AvalonSimonSays.Assets";
 				public const string Sounds = "assets/AvalonSimonSays.Assets.Sounds";
+				public const string SocialLinks = "assets/AvalonSimonSays.Asssets.SocialLinks";
+			
 			}
 
 
