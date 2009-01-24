@@ -25,6 +25,8 @@ namespace AvalonSimonSays.Code
 
 		public readonly BindingList<Option> Options = new BindingList<Option>();
 
+		public readonly PlayerIdentity LocalIdentity;
+
 		public bool OptionsEnabled
 		{
 			set
