@@ -10,6 +10,7 @@ namespace AvalonSimonSays.Promotion
 		public static class Nonoba
 		{
 			public const string URL = "http://nonoba.com/zproxy/avalon-simon-says";
+			public const string Embed = URL + "/embed";
 		}
 	}
 }
