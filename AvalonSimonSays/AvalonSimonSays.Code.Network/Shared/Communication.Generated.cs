@@ -40,6 +40,10 @@ namespace AvalonSimonSays.Code.Network.Shared
             UserClickOption,
             SimonOption,
             UserSimonOption,
+            SetActive,
+            UserSetActive,
+            Server_SetScore,
+            Server_AddFail,
         }
         #endregion
 
@@ -76,6 +80,10 @@ namespace AvalonSimonSays.Code.Network.Shared
             event Action<RemoteEvents.UserClickOptionArguments> UserClickOption;
             event Action<RemoteEvents.SimonOptionArguments> SimonOption;
             event Action<RemoteEvents.UserSimonOptionArguments> UserSimonOption;
+            event Action<RemoteEvents.SetActiveArguments> SetActive;
+            event Action<RemoteEvents.UserSetActiveArguments> UserSetActive;
+            event Action<RemoteEvents.Server_SetScoreArguments> Server_SetScore;
+            event Action<RemoteEvents.Server_AddFailArguments> Server_AddFail;
         }
         #endregion
 
@@ -95,17 +103,17 @@ namespace AvalonSimonSays.Code.Network.Shared
                 public object[] args;
             }
             #endregion
-            public void Server_Hello(int user, string name, int others)
+            public void Server_Hello(int user, string name, int others, int turn)
             {
                 if (this.Send != null)
                 {
-                    Send(new SendArguments { i = Messages.Server_Hello, args = new object[] { user, name, others } });
+                    Send(new SendArguments { i = Messages.Server_Hello, args = new object[] { user, name, others, turn } });
                 }
                 if (this.VirtualTargets != null)
                 {
                     foreach (var Target__ in this.VirtualTargets())
                     {
-                        Target__.Server_Hello(user, name, others);
+                        Target__.Server_Hello(user, name, others, turn);
                     }
                 }
             }
@@ -389,6 +397,62 @@ namespace AvalonSimonSays.Code.Network.Shared
                     }
                 }
             }
+            public void SetActive(int frame, int active)
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.SetActive, args = new object[] { frame, active } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.SetActive(frame, active);
+                    }
+                }
+            }
+            public void UserSetActive(int user, int frame, int active)
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.UserSetActive, args = new object[] { user, frame, active } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.UserSetActive(user, frame, active);
+                    }
+                }
+            }
+            public void Server_SetScore(int score)
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.Server_SetScore, args = new object[] { score } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.Server_SetScore(score);
+                    }
+                }
+            }
+            public void Server_AddFail()
+            {
+                if (this.Send != null)
+                {
+                    Send(new SendArguments { i = Messages.Server_AddFail, args = new object[] {  } });
+                }
+                if (this.VirtualTargets != null)
+                {
+                    foreach (var Target__ in this.VirtualTargets())
+                    {
+                        Target__.Server_AddFail();
+                    }
+                }
+            }
         }
         #endregion
 
@@ -450,6 +514,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                     value.MouseMove += this.UserMouseMove;
                     value.ClickOption += this.UserClickOption;
                     value.SimonOption += this.UserSimonOption;
+                    value.SetActive += this.UserSetActive;
                 }
 
                 public void RemoveDelegates(IEvents value)
@@ -461,6 +526,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                     value.MouseMove -= this.UserMouseMove;
                     value.ClickOption -= this.UserClickOption;
                     value.SimonOption -= this.UserSimonOption;
+                    value.SetActive -= this.UserSetActive;
                 }
                 #endregion
 
@@ -492,6 +558,10 @@ namespace AvalonSimonSays.Code.Network.Shared
                 public void UserSimonOption(SimonOptionArguments e)
                 {
                     Target.UserSimonOption(this.user, e.frame, e.option);
+                }
+                public void UserSetActive(SetActiveArguments e)
+                {
+                    Target.UserSetActive(this.user, e.frame, e.active);
                 }
                 #endregion
             }
@@ -591,6 +661,14 @@ namespace AvalonSimonSays.Code.Network.Shared
                 {
                     this.Target.UserSimonOption(this.user, e.frame, e.option);
                 }
+                public void UserSetActive(int frame, int active)
+                {
+                    this.Target.UserSetActive(this.user, frame, active);
+                }
+                public void UserSetActive(UserSetActiveArguments e)
+                {
+                    this.Target.UserSetActive(this.user, e.frame, e.active);
+                }
                 #endregion
             }
             #endregion
@@ -615,6 +693,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                     value.UserEnqueueUser += this.UserEnqueueUser;
                     value.UserClickOption += this.UserClickOption;
                     value.UserSimonOption += this.UserSimonOption;
+                    value.UserSetActive += this.UserSetActive;
                 }
 
                 public void RemoveDelegates(IEvents value)
@@ -630,6 +709,7 @@ namespace AvalonSimonSays.Code.Network.Shared
                     value.UserEnqueueUser -= this.UserEnqueueUser;
                     value.UserClickOption -= this.UserClickOption;
                     value.UserSimonOption -= this.UserSimonOption;
+                    value.UserSetActive -= this.UserSetActive;
                 }
                 #endregion
 
@@ -700,6 +780,12 @@ namespace AvalonSimonSays.Code.Network.Shared
                     if (_target == null) return;
                     _target.UserSimonOption(this.user, e.frame, e.option);
                 }
+                public void UserSetActive(UserSetActiveArguments e)
+                {
+                    var _target = this.Target(e.user);
+                    if (_target == null) return;
+                    _target.UserSetActive(this.user, e.frame, e.active);
+                }
                 #endregion
             }
             #endregion
@@ -711,10 +797,11 @@ namespace AvalonSimonSays.Code.Network.Shared
                 public int user;
                 public string name;
                 public int others;
+                public int turn;
                 [DebuggerHidden]
                 public override string ToString()
                 {
-                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", name = ").Append(this.name).Append(", others = ").Append(this.others).Append(" }").ToString();
+                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", name = ").Append(this.name).Append(", others = ").Append(this.others).Append(", turn = ").Append(this.turn).Append(" }").ToString();
                 }
             }
             #endregion
@@ -1010,11 +1097,68 @@ namespace AvalonSimonSays.Code.Network.Shared
             }
             #endregion
             public event Action<UserSimonOptionArguments> UserSimonOption;
+            #region SetActiveArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class SetActiveArguments
+            {
+                public int frame;
+                public int active;
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().Append("{ frame = ").Append(this.frame).Append(", active = ").Append(this.active).Append(" }").ToString();
+                }
+            }
+            #endregion
+            public event Action<SetActiveArguments> SetActive;
+            #region UserSetActiveArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class UserSetActiveArguments : WithUserArguments
+            {
+                public int frame;
+                public int active;
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().Append("{ user = ").Append(this.user).Append(", frame = ").Append(this.frame).Append(", active = ").Append(this.active).Append(" }").ToString();
+                }
+            }
+            #endregion
+            public event Action<UserSetActiveArguments> UserSetActive;
+            #region Server_SetScoreArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class Server_SetScoreArguments
+            {
+                public int score;
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().Append("{ score = ").Append(this.score).Append(" }").ToString();
+                }
+            }
+            #endregion
+            public event Action<Server_SetScoreArguments> Server_SetScore;
+            #region Server_AddFailArguments
+            [Script]
+            [CompilerGenerated]
+            public sealed partial class Server_AddFailArguments
+            {
+                [DebuggerHidden]
+                public override string ToString()
+                {
+                    return new StringBuilder().ToString();
+                }
+            }
+            #endregion
+            public event Action<Server_AddFailArguments> Server_AddFail;
             public RemoteEvents()
             {
                 DispatchTable = new Dictionary<Messages, Action<IDispatchHelper>>
                         {
-                            { Messages.Server_Hello, e => { Server_Hello(new Server_HelloArguments { user = e.GetInt32(0), name = e.GetString(1), others = e.GetInt32(2) }); } },
+                            { Messages.Server_Hello, e => { Server_Hello(new Server_HelloArguments { user = e.GetInt32(0), name = e.GetString(1), others = e.GetInt32(2), turn = e.GetInt32(3) }); } },
                             { Messages.Server_UserJoined, e => { Server_UserJoined(new Server_UserJoinedArguments { user = e.GetInt32(0), name = e.GetString(1) }); } },
                             { Messages.Server_UserLeft, e => { Server_UserLeft(new Server_UserLeftArguments { user = e.GetInt32(0), name = e.GetString(1) }); } },
                             { Messages.UserHello, e => { UserHello(new UserHelloArguments { user = e.GetInt32(0), name = e.GetString(1), frame = e.GetInt32(2) }); } },
@@ -1035,6 +1179,10 @@ namespace AvalonSimonSays.Code.Network.Shared
                             { Messages.UserClickOption, e => { UserClickOption(new UserClickOptionArguments { user = e.GetInt32(0), frame = e.GetInt32(1), option = e.GetInt32(2) }); } },
                             { Messages.SimonOption, e => { SimonOption(new SimonOptionArguments { frame = e.GetInt32(0), option = e.GetInt32(1) }); } },
                             { Messages.UserSimonOption, e => { UserSimonOption(new UserSimonOptionArguments { user = e.GetInt32(0), frame = e.GetInt32(1), option = e.GetInt32(2) }); } },
+                            { Messages.SetActive, e => { SetActive(new SetActiveArguments { frame = e.GetInt32(0), active = e.GetInt32(1) }); } },
+                            { Messages.UserSetActive, e => { UserSetActive(new UserSetActiveArguments { user = e.GetInt32(0), frame = e.GetInt32(1), active = e.GetInt32(2) }); } },
+                            { Messages.Server_SetScore, e => { Server_SetScore(new Server_SetScoreArguments { score = e.GetInt32(0) }); } },
+                            { Messages.Server_AddFail, e => { Server_AddFail(new Server_AddFailArguments {  }); } },
                         }
                 ;
                 DispatchTableDelegates = new Dictionary<Messages, Converter<object, Delegate>>
@@ -1060,6 +1208,10 @@ namespace AvalonSimonSays.Code.Network.Shared
                             { Messages.UserClickOption, e => UserClickOption },
                             { Messages.SimonOption, e => SimonOption },
                             { Messages.UserSimonOption, e => UserSimonOption },
+                            { Messages.SetActive, e => SetActive },
+                            { Messages.UserSetActive, e => UserSetActive },
+                            { Messages.Server_SetScore, e => Server_SetScore },
+                            { Messages.Server_AddFail, e => Server_AddFail },
                         }
                 ;
             }
@@ -1124,10 +1276,10 @@ namespace AvalonSimonSays.Code.Network.Shared
                 e();
             }
             public event Action<RemoteEvents.Server_HelloArguments> Server_Hello;
-            void IMessages.Server_Hello(int user, string name, int others)
+            void IMessages.Server_Hello(int user, string name, int others, int turn)
             {
                 if(Server_Hello == null) return;
-                var v = new RemoteEvents.Server_HelloArguments { user = user, name = name, others = others };
+                var v = new RemoteEvents.Server_HelloArguments { user = user, name = name, others = others, turn = turn };
                 this.VirtualLatency(() => this.Server_Hello(v));
             }
 
@@ -1291,9 +1443,41 @@ namespace AvalonSimonSays.Code.Network.Shared
                 this.VirtualLatency(() => this.UserSimonOption(v));
             }
 
+            public event Action<RemoteEvents.SetActiveArguments> SetActive;
+            void IMessages.SetActive(int frame, int active)
+            {
+                if(SetActive == null) return;
+                var v = new RemoteEvents.SetActiveArguments { frame = frame, active = active };
+                this.VirtualLatency(() => this.SetActive(v));
+            }
+
+            public event Action<RemoteEvents.UserSetActiveArguments> UserSetActive;
+            void IMessages.UserSetActive(int user, int frame, int active)
+            {
+                if(UserSetActive == null) return;
+                var v = new RemoteEvents.UserSetActiveArguments { user = user, frame = frame, active = active };
+                this.VirtualLatency(() => this.UserSetActive(v));
+            }
+
+            public event Action<RemoteEvents.Server_SetScoreArguments> Server_SetScore;
+            void IMessages.Server_SetScore(int score)
+            {
+                if(Server_SetScore == null) return;
+                var v = new RemoteEvents.Server_SetScoreArguments { score = score };
+                this.VirtualLatency(() => this.Server_SetScore(v));
+            }
+
+            public event Action<RemoteEvents.Server_AddFailArguments> Server_AddFail;
+            void IMessages.Server_AddFail()
+            {
+                if(Server_AddFail == null) return;
+                var v = new RemoteEvents.Server_AddFailArguments {  };
+                this.VirtualLatency(() => this.Server_AddFail(v));
+            }
+
         }
         #endregion
     }
     #endregion
 }
-// 24.01.2009 16:18:17
+// 24.01.2009 19:25:57

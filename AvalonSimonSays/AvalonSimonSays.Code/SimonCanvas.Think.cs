@@ -39,7 +39,7 @@ namespace AvalonSimonSays.Code
 			
 
 
-			StatusText.AttachTo(this.InfoLayer).MoveTo(4, 4);
+			//StatusText.AttachTo(this.InfoLayer).MoveTo(4, 4);
 
 			ThinkTimer = (1000 / DefaultFramerate).AtInterval(
 				delegate

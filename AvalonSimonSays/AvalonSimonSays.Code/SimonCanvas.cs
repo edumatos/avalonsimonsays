@@ -28,6 +28,29 @@ namespace AvalonSimonSays.Code
 
 		public readonly PlayerIdentity LocalIdentity = new PlayerIdentity { Name = "Local Player" };
 
+		PlayerIdentity InternalActiveIdentity;
+
+		public PlayerIdentity ActiveIdentity
+		{
+			get
+			{
+				return InternalActiveIdentity;
+			}
+			set
+			{
+				InternalActiveIdentity = value;
+
+				if (value != null)
+					if (value == LocalIdentity)
+					{
+						if (this.CoPlayers.Count > 0)
+							this.Message("your turn!");
+					}
+					else
+						this.Message(value.Name + " is now playing");
+			}
+		}
+
 		bool InternalOptionsEnabled = true;
 		public bool OptionsEnabled
 		{
@@ -55,6 +78,16 @@ namespace AvalonSimonSays.Code
 			}
 		}
 
+		public PlayerIdentity PrimateIdentity
+		{
+			get
+			{
+				var id = this.AllPlayers.Min(k => k.Number);
+
+				return this.AllPlayers.Single(k => k.Number == id);
+			}
+		}
+
 		public bool LocalIdentityIsPrimate
 		{
 			get
@@ -63,15 +96,41 @@ namespace AvalonSimonSays.Code
 			}
 		}
 
-		public int MyHighestScore;
+		int InternalMyHighestScore;
+		public int MyHighestScore
+		{
+			get
+			{
+				return InternalMyHighestScore;
+			}
+			set
+			{
+				InternalMyHighestScore = value;
+
+				if (MyHighestScoreChanged != null)
+					MyHighestScoreChanged();
+			}
+		}
+
+		public event Action MyHighestScoreChanged;
 
 		public readonly TextBox Score;
+
+		public event Action StatisticsAddFail;
 
 		public SimonCanvas()
 		{
 			Width = DefaultWidth;
 			Height = DefaultHeight;
 			Background = Brushes.Black;
+
+			this.CoPlayers.ForEachItemDeleted(
+				DeletedPlayer =>
+				{
+					if (DeletedPlayer == ActiveIdentity)
+						ActiveIdentity = PrimateIdentity;
+				}
+			);
 
 			this.ClipToBounds = true;
 
@@ -111,8 +170,16 @@ namespace AvalonSimonSays.Code
 					NewOption.Click +=
 						delegate
 						{
+							if (ActiveIdentity != LocalIdentity)
+							{
+								if (ActiveIdentity != null)
+									this.Message(ActiveIdentity.Name + " is now playing, wait!");
+
+								return;
+							}
+
 							if (this.Sync_ClickOption != null)
-								this.Sync_ClickOption(Options.IndexOf(NewOption));
+								this.Sync_ClickOption(LocalIdentity.Number, Options.IndexOf(NewOption));
 						};
 				}
 			);
@@ -227,13 +294,15 @@ namespace AvalonSimonSays.Code
 
 
 			this.Sync_ClickOption =
-				option =>
+				(user, option) =>
 				{
 					if (Simon.Count == 0)
 					{
 						Message("desync!");
 						return;
 					}
+
+					HappySimon.Opacity = 0;
 
 					var Option = Options.AtModulus(option);
 
@@ -260,12 +329,27 @@ namespace AvalonSimonSays.Code
 								Simon.Enqueue(User.Dequeue());
 							}
 
-							GoForward();
+							this.LocalIdentity.HandleFutureFrame(
+								DefaultFramerate / 2,
+								GoForward
+							);
+
+							if (this.LocalIdentity == this.ActiveIdentity)
+								if (this.Sync_RemoteOnly_SetActive != null)
+									this.Sync_RemoteOnly_SetActive();
 						}
 					}
 					else
 					{
+						if (user == LocalIdentity.Number)
+							if (StatisticsAddFail != null)
+								StatisticsAddFail();
+
 						ShowFailure(n);
+
+						if (this.LocalIdentity == this.ActiveIdentity)
+							if (this.Sync_RemoteOnly_SetActive != null)
+								this.Sync_RemoteOnly_SetActive();
 					}
 				};
 
@@ -294,7 +378,13 @@ namespace AvalonSimonSays.Code
 					)(
 						delegate
 						{
+							HappySimon.Opacity = 1;
 							OptionsEnabled = true;
+
+							this.LocalIdentity.HandleFutureFrame(
+								DefaultFramerate / 2,
+								() => HappySimon.Opacity = 0
+							);
 						}
 					);
 
@@ -344,7 +434,8 @@ Will ya?
 What?!?
 ";
 
-			Message(FailureText.Split(Environment.NewLine).Random());
+			if (LocalIdentity == ActiveIdentity)
+				Message(FailureText.Split(Environment.NewLine).Random());
 
 			OptionsEnabled = false;
 
@@ -414,15 +505,8 @@ What?!?
 
 			GoForward();
 
-			this.Message(Promotion.Info.Title);
 
-			this.LocalIdentity.HandleFutureFrame(
-				2 * DefaultFramerate,
-				delegate
-				{
-					this.Message(Promotion.Info.Description);
-				}
-			);
+			this.Message(Promotion.Info.Description);
 
 		}
 

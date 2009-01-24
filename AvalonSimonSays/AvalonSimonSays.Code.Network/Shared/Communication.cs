@@ -10,7 +10,7 @@ namespace AvalonSimonSays.Code.Network.Shared
 	{
 		public partial interface IMessages
 		{
-			void Server_Hello(int user, string name, int others);
+			void Server_Hello(int user, string name, int others, int turn);
 
 			void Server_UserJoined(int user, string name);
 			void Server_UserLeft(int user, string name);
@@ -47,6 +47,12 @@ namespace AvalonSimonSays.Code.Network.Shared
 
 			void SimonOption(int frame, int option);
 			void UserSimonOption(int user, int frame, int option);
+
+			void SetActive(int frame, int active);
+			void UserSetActive(int user, int frame, int active);
+
+			void Server_SetScore(int score);
+			void Server_AddFail();
 		}
 
 

@@ -24,8 +24,10 @@ namespace AvalonSimonSays.Labs.Shared
 			Width = DefaultWidth;
 			Height = DefaultHeight;
 
-			new TargetCanvas().AttachTo(this).StartGame();
-
+			var k = new TargetCanvas().AttachTo(this);
+			
+			k.ActiveIdentity = k.LocalIdentity;
+			k.StartGame();
 		}
 	}
 }

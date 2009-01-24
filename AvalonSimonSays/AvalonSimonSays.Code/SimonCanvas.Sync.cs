@@ -20,8 +20,11 @@ namespace AvalonSimonSays.Code
 		public delegate void DelegateMouseMove(double x, double y);
 		public DelegateMouseMove Sync_RemoteOnly_MouseMove;
 
+		public Action Sync_RemoteOnly_SetActive;
+
+
 		[Script]
-		public delegate void DelegateClickOption(int option);
+		public delegate void DelegateClickOption(int user, int option);
 		public DelegateClickOption Sync_ClickOption;
 
 		[Script]
