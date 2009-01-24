@@ -35,3 +35,4 @@ I have recorded the steps taken to make this game on this page.
  # Create AvalonSimonSays.Code.Network and disable code optimization
  # Create AvalonSimonSays.Multiplayer
  # Create /Public for nonoba swf and dll
+ # Ping back to MochiAds and fill the profile
