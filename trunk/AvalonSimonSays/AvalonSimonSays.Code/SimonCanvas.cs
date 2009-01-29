@@ -363,13 +363,16 @@ namespace AvalonSimonSays.Code
 					HappySimon.Opacity = 0;
 
 					Simon.ForEach(
-						(value, next) =>
+						(value, index, next) =>
 						{
+							var max = DefaultFramerate / 2;
+							var min = DefaultFramerate / 20;
+
 							value.Play(
 								delegate
 								{
 									this.LocalIdentity.HandleFutureFrame(
-										DefaultFramerate / 2,
+										min,
 										next
 									);
 								}
