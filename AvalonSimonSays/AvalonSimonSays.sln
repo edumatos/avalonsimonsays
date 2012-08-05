@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvalonSimonSays.Labs", "AvalonSimonSays.Labs\AvalonSimonSays.Labs.csproj", "{C3BC69E5-EAFF-413D-9C08-2B27DAEAD915}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvalonSimonSays.Assets", "AvalonSimonSays.Assets\AvalonSimonSays.Assets.csproj", "{A61F5ADB-BEA5-47F6-B633-C0FEB9059AFA}"
