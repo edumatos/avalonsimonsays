@@ -19,6 +19,7 @@ namespace AvalonSimonSays.Labs.Shared
 		public const int DefaultWidth = TargetCanvas.DefaultWidth;
 		public const int DefaultHeight = TargetCanvas.DefaultHeight;
 
+
 		public LabsCanvas()
 		{
 			Width = DefaultWidth;

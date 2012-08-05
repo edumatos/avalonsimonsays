@@ -17,6 +17,9 @@ namespace AvalonSimonSays.Code
 	[Script]
 	public partial class SimonCanvas : Canvas, IDisposable
 	{
+        AvalonSimonSays.Assets.IAssemblyReferenceToken ref0;
+
+
 		public const int DefaultWidth = 600;
 		public const int DefaultHeight = 480;
 
